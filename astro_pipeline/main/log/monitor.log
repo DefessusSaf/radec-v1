@@ -1,0 +1,350 @@
+2025-05-21 16:04:56,221 - INFO - Лог-файл /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/log/monitor.log очищен/создан при запуске.
+2025-05-21 16:04:56,221 - INFO - Все необходимые директории проекта проверены/созданы.
+2025-05-21 16:04:56,221 - INFO - --- Запуск мониторинга директории: /home/hellnim/Downloads/radecWork-main/astro_pipeline/input ---
+2025-05-21 16:04:56,222 - INFO - Используется временная директория: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp
+2025-05-21 16:04:56,222 - INFO - Используется лок-файл: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/monitor_lock
+2025-05-21 16:05:04,396 - INFO - Обнаружен новый файл: Meteor1_19R_00001.fits
+2025-05-21 16:05:04,397 - INFO - Блокировка получена для Meteor1_19R_00001.fits
+2025-05-21 16:05:04,397 - INFO - 
+--- Начинаем обработку файла: Meteor1_19R_00001.fits ---
+2025-05-21 16:05:04,398 - INFO - Записываем имя файла в /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/processing_log.txt
+2025-05-21 16:05:04,398 - INFO - ===========  Запуск config_setting.py ===========
+2025-05-21 16:05:04,398 - INFO - Команда: /home/hellnim/anaconda3/envs/radec/bin/python /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/config_setting.py /home/hellnim/Downloads/radecWork-main/astro_pipeline/input/Meteor1_19R_00001.fits
+2025-05-21 16:05:05,255 - INFO - STDOUT config_setting.py:
+Success!A sufficient number of objects found.
+Final meaning DETECT_MINAREA: 9.00
+Final meaning DETECT_THRESH: 1.50
+2025-05-21 16:05:05,258 - WARNING - STDERR config_setting.py:
+2025-05-21 16:05:04,767 - INFO - ROOT_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline
+2025-05-21 16:05:04,767 - INFO - SCRIPTS_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main
+2025-05-21 16:05:04,767 - INFO - INPUT_DIR / LOAD_FILE_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/input
+2025-05-21 16:05:04,767 - INFO - MAIN_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main
+2025-05-21 16:05:04,767 - INFO - CONFIGS_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/conf
+2025-05-21 16:05:04,767 - INFO - TMP_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp
+2025-05-21 16:05:04,767 - INFO - PROCESSED_FITS_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/processed
+2025-05-21 16:05:04,767 - INFO - PROCESSED_RESULTS_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/output
+2025-05-21 16:05:04,767 - INFO - LOCK_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/monitor_lock
+2025-05-21 16:05:04,767 - INFO - PROCESSING_LOG_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/processing_log.txt
+2025-05-21 16:05:04,767 - INFO - XY_FITS_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.fits
+2025-05-21 16:05:04,768 - INFO - XY_TXT_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.txt
+2025-05-21 16:05:04,768 - INFO - WCS_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.wcs
+2025-05-21 16:05:04,768 - INFO - SEX_CATALOG_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/k1-imp.fts.sx
+2025-05-21 16:05:04,768 - INFO - REGION_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/elik1-imp-field.reg
+2025-05-21 16:05:04,768 - INFO - ASTROMETRY_CONFIG_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/conf/astrometry.cfg
+2025-05-21 16:05:04,769 - INFO - Temporary Directory for SExtractor Created/exists: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/temp_sextractor_files
+2025-05-21 16:05:04,769 - INFO - Открытие FITS файла: /home/hellnim/Downloads/radecWork-main/astro_pipeline/input/Meteor1_19R_00001.fits
+2025-05-21 16:05:04,770 - INFO - Used GAIN: 30
+2025-05-21 16:05:04,771 - INFO - Pixel size (XPIXSZ): 11.28 um
+2025-05-21 16:05:04,773 - INFO - Focal length: 551.0 mm
+2025-05-21 16:05:04,773 - INFO - Calculated scale: 4.2226 arcsec / pix
+2025-05-21 16:05:04,773 - INFO - The title is extracted and the scale is designed for 0.0038 seconds.
+2025-05-21 16:05:04,773 - INFO - Parameters from heading: XPIXSZ=11.28 um, GAIN=30, EXPTIME=0.2 s
+2025-05-21 16:05:04,773 - INFO - The initial value of Detect_Minarea is set in 9 pix.
+2025-05-21 16:05:04,773 - INFO - The initial value of Detect_thresh is installed in 1.5 sigma.
+2025-05-21 16:05:04,773 - INFO - The initial Sextractor parameters are designed for 0.0000 seconds.
+2025-05-21 16:05:04,773 - INFO - The beginning of an iterative search 80 objects (max. Iterations: 50).
+2025-05-21 16:05:04,773 - INFO - --- Iteration 1/50 ---
+2025-05-21 16:05:04,773 - INFO - Start SExtractor с DETECT_MINAREA=9.00, DETECT_THRESH=1.50
+2025-05-21 16:05:04,773 - INFO - The expected catalog file: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/k1-imp.fts.sx
+2025-05-21 16:05:05,117 - INFO - SExtractor Successfully completed.
+2025-05-21 16:05:05,117 - WARNING - Stderr (Possible warnings):
+
+> WARNING: ghj keyword unknown
+
+
+> WARNING: This executable has been compiled using a version of the ATLAS library without support for multithreading. Performance will be degraded.
+
+[1M> 
+[1A----- SExtractor 2.28.2 started on 2025-05-21 at 16:05:04 with 6 threads
+
+[1M> Setting catalog parameters
+[1A[1M> Reading detection filter
+[1A[1M> Initializing catalog
+[1A[1M> Looking for Meteor1_19R_00001.fits
+[1A----- Measuring from: Meteor1_19R_00001.fits
+      "Meteor1_19R" / no ext. header / 3200x2140 / 8 bits (integers)
+Detection+Measurement image: [1M> Setting up background maps
+[1A[1M> Setting up background map at line:   64
+[1A[1M> Setting up background map at line:  128
+[1A[1M> Setting up background map at line:  192
+[1A[1M> Setting up background map at line:  256
+[1A[1M> Setting up background map at line:  320
+[1A[1M> Setting up background map at line:  384
+[1A[1M> Setting up background map at line:  448
+[1A[1M> Setting up background map at line:  512
+[1A[1M> Setting up background map at line:  576
+[1A[1M> Setting up background map at line:  640
+[1A[1M> Setting up background map at line:  704
+[1A[1M> Setting up background map at line:  768
+[1A[1M> Setting up background map at line:  832
+[1A[1M> Setting up background map at line:  896
+[1A[1M> Setting up background map at line:  960
+[1A[1M> Setting up background map at line: 1024
+[1A[1M> Setting up background map at line: 1088
+[1A[1M> Setting up background map at line: 1152
+[1A[1M> Setting up background map at line: 1216
+[1A[1M> Setting up background map at line: 1280
+[1A[1M> Setting up background map at line: 1344
+[1A[1M> Setting up background map at line: 1408
+[1A[1M> Setting up background map at line: 1472
+[1A[1M> Setting up background map at line: 1536
+[1A[1M> Setting up background map at line: 1600
+[1A[1M> Setting up background map at line: 1664
+[1A[1M> Setting up background map at line: 1728
+[1A[1M> Setting up background map at line: 1792
+[1A[1M> Setting up background map at line: 1856
+[1A[1M> Setting up background map at line: 1920
+[1A[1M> Setting up background map at line: 1984
+[1A[1M> Setting up background map at line: 2048
+[1A[1M> Setting up background map at line: 2112
+[1A[1M> Filtering background map(s)
+[1A[1M> Computing background d-map
+[1A[1M> Computing background-noise d-map
+[1A(M+D) Background: 12.9973    RMS: 1.46789    / Threshold: 2.20183    
+[1M> Scanning image
+[1A[1M> Line:   25  Objects:        1 detected /        0 sextracted
+[1A[1M> Line:   50  Objects:        3 detected /        0 sextracted
+[1A[1M> Line:   75  Objects:        3 detected /        0 sextracted
+[1A[1M> Line:  100  Objects:        3 detected /        0 sextracted
+[1A[1M> Line:  125  Objects:        5 detected /        0 sextracted
+[1A[1M> Line:  150  Objects:        7 detected /        0 sextracted
+[1A[1M> Line:  175  Objects:        9 detected /        0 sextracted
+[1A[1M> Line:  200  Objects:       10 detected /        0 sextracted
+[1A[1M> Line:  225  Objects:       11 detected /        0 sextracted
+[1A[1M> Line:  250  Objects:       14 detected /        0 sextracted
+[1A[1M> Line:  275  Objects:       18 detected /        0 sextracted
+[1A[1M> Line:  300  Objects:       19 detected /        0 sextracted
+[1A[1M> Line:  325  Objects:       23 detected /        0 sextracted
+[1A[1M> Line:  350  Objects:       27 detected /        0 sextracted
+[1A[1M> Line:  375  Objects:       29 detected /        0 sextracted
+[1A[1M> Line:  400  Objects:       30 detected /        0 sextracted
+[1A[1M> Line:  425  Objects:       31 detected /        0 sextracted
+[1A[1M> Line:  450  Objects:       33 detected /        0 sextracted
+[1A[1M> Line:  475  Objects:       35 detected /        0 sextracted
+[1A[1M> Line:  500  Objects:       36 detected /        0 sextracted
+[1A[1M> Line:  525  Objects:       38 detected /        0 sextracted
+[1A[1M> Line:  550  Objects:       38 detected /        0 sextracted
+[1A[1M> Line:  575  Objects:       41 detected /        0 sextracted
+[1A[1M> Line:  600  Objects:       41 detected /        0 sextracted
+[1A[1M> Line:  625  Objects:       43 detected /        0 sextracted
+[1A[1M> Line:  650  Objects:       43 detected /        0 sextracted
+[1A[1M> Line:  675  Objects:       45 detected /        0 sextracted
+[1A[1M> Line:  700  Objects:       48 detected /        0 sextracted
+[1A[1M> Line:  725  Objects:       49 detected /        0 sextracted
+[1A[1M> Line:  750  Objects:       49 detected /        0 sextracted
+[1A[1M> Line:  775  Objects:       50 detected /        0 sextracted
+[1A[1M> Line:  800  Objects:       51 detected /        0 sextracted
+[1A[1M> Line:  825  Objects:       52 detected /        0 sextracted
+[1A[1M> Line:  850  Objects:       54 detected /        0 sextracted
+[1A[1M> Line:  875  Objects:       56 detected /        0 sextracted
+[1A[1M> Line:  900  Objects:       58 detected /        0 sextracted
+[1A[1M> Line:  925  Objects:       62 detected /        0 sextracted
+[1A[1M> Line:  950  Objects:       63 detected /        0 sextracted
+[1A[1M> Line:  975  Objects:       63 detected /        0 sextracted
+[1A[1M> Line: 1000  Objects:       65 detected /        0 sextracted
+[1A[1M> Line: 1023  Objects:       70 detected /        0 sextracted
+[1A[1M> Line: 1025  Objects:       70 detected /        3 sextracted
+[1A[1M> Line: 1050  Objects:       74 detected /        3 sextracted
+[1A[1M> Line: 1075  Objects:       76 detected /        3 sextracted
+[1A[1M> Line: 1100  Objects:       76 detected /        4 sextracted
+[1A[1M> Line: 1125  Objects:       76 detected /        6 sextracted
+[1A[1M> Line: 1150  Objects:       76 detected /        8 sextracted
+[1A[1M> Line: 1175  Objects:       79 detected /       10 sextracted
+[1A[1M> Line: 1200  Objects:       80 detected /       11 sextracted
+[1A[1M> Line: 1225  Objects:       80 detected /       13 sextracted
+[1A[1M> Line: 1250  Objects:       80 detected /       16 sextracted
+[1A[1M> Line: 1275  Objects:       82 detected /       17 sextracted
+[1A[1M> Line: 1300  Objects:       83 detected /       20 sextracted
+[1A[1M> Line: 1325  Objects:       84 detected /       26 sextracted
+[1A[1M> Line: 1350  Objects:       86 detected /       27 sextracted
+[1A[1M> Line: 1375  Objects:       88 detected /       28 sextracted
+[1A[1M> Line: 1400  Objects:       92 detected /       29 sextracted
+[1A[1M> Line: 1425  Objects:       95 detected /       30 sextracted
+[1A[1M> Line: 1450  Objects:       95 detected /       33 sextracted
+[1A[1M> Line: 1475  Objects:       96 detected /       35 sextracted
+[1A[1M> Line: 1500  Objects:       99 detected /       36 sextracted
+[1A[1M> Line: 1525  Objects:      100 detected /       39 sextracted
+[1A[1M> Line: 1550  Objects:      102 detected /       40 sextracted
+[1A[1M> Line: 1575  Objects:      105 detected /       40 sextracted
+[1A[1M> Line: 1600  Objects:      105 detected /       42 sextracted
+[1A[1M> Line: 1625  Objects:      106 detected /       42 sextracted
+[1A[1M> Line: 1650  Objects:      106 detected /       43 sextracted
+[1A[1M> Line: 1675  Objects:      107 detected /       46 sextracted
+[1A[1M> Line: 1700  Objects:      107 detected /       47 sextracted
+[1A[1M> Line: 1725  Objects:      108 detected /       48 sextracted
+[1A[1M> Line: 1750  Objects:      108 detected /       49 sextracted
+[1A[1M> Line: 1775  Objects:      110 detected /       50 sextracted
+[1A[1M> Line: 1800  Objects:      111 detected /       51 sextracted
+[1A[1M> Line: 1825  Objects:      111 detected /       53 sextracted
+[1A[1M> Line: 1850  Objects:      112 detected /       54 sextracted
+[1A[1M> Line: 1875  Objects:      117 detected /       54 sextracted
+[1A[1M> Line: 1900  Objects:      120 detected /       54 sextracted
+[1A[1M> Line: 1925  Objects:      121 detected /       54 sextracted
+[1A[1M> Line: 1950  Objects:      121 detected /       54 sextracted
+[1A[1M> Line: 1975  Objects:      123 detected /       54 sextracted
+[1A[1M> Line: 2000  Objects:      125 detected /       54 sextracted
+[1A[1M> Line: 2025  Objects:      126 detected /       54 sextracted
+[1A[1M> Line: 2050  Objects:      132 detected /       54 sextracted
+[1A[1M> Line: 2075  Objects:      135 detected /       54 sextracted
+[1A[1M> Line: 2100  Objects:      138 detected /       54 sextracted
+[1A[1M> Line: 2125  Objects:      140 detected /       54 sextracted
+[1A      Objects: detected 142      / sextracted 133             
+
+[1M> Closing files
+[1A[1M> 
+[1A> All done (in 0.3 s: 6817.4 lines/s , 423.7 detections/s)
+
+2025-05-21 16:05:05,117 - INFO - Reading the catalog file: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/k1-imp.fts.sx
+2025-05-21 16:05:05,118 - INFO - SExtractor I processed the file and found133 objects (from /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/k1-imp.fts.sx) For 0.3447 seconds.
+2025-05-21 16:05:05,118 - INFO - Found 133 objects (>= 80) with DETECT_MINAREA = 9.00
+2025-05-21 16:05:05,120 - INFO - Temporary Directory /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/temp_sextractor_files Successfully removed.
+2025-05-21 16:05:05,120 - INFO - Cleaning is performed for 0.0017 seconds.
+2025-05-21 16:05:05,120 - INFO - The work of the script config_setting.py completed.
+2025-05-21 16:05:05,262 - INFO - config_setting.py завершен.
+2025-05-21 16:05:05,262 - INFO - ===========  Запуск region.py ===========
+2025-05-21 16:05:05,262 - INFO - Команда: /home/hellnim/anaconda3/envs/radec/bin/python /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/region.py
+2025-05-21 16:05:06,430 - INFO - STDOUT region.py:
+Reading file /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.txt
+Header: # X_CENTER  Y_CENTER  AREA
+Column names: ['X_CENTER', 'Y_CENTER', 'AREA']
+Read line 133
+Merging AREA
+lengths: [133]
+total: 133
+type: <U8
+Merging Y_CENTER
+lengths: [133]
+total: 133
+type: <U9
+Merging X_CENTER
+lengths: [133]
+total: 133
+type: <U9
+Region file saved to /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/elik1-imp-field.reg
+XY text file saved to /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.txt
+Executing command: /home/hellnim/anaconda3/envs/radec/bin/text2fits /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.txt /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.fits
+XY FITS file created at /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.fits
+2025-05-21 16:05:06,431 - WARNING - STDERR region.py:
+2025-05-21 16:05:05,522 - INFO - ROOT_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline
+2025-05-21 16:05:05,522 - INFO - SCRIPTS_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main
+2025-05-21 16:05:05,522 - INFO - INPUT_DIR / LOAD_FILE_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/input
+2025-05-21 16:05:05,522 - INFO - MAIN_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main
+2025-05-21 16:05:05,522 - INFO - CONFIGS_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/conf
+2025-05-21 16:05:05,522 - INFO - TMP_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp
+2025-05-21 16:05:05,522 - INFO - PROCESSED_FITS_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/processed
+2025-05-21 16:05:05,522 - INFO - PROCESSED_RESULTS_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/output
+2025-05-21 16:05:05,522 - INFO - LOCK_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/monitor_lock
+2025-05-21 16:05:05,522 - INFO - PROCESSING_LOG_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/processing_log.txt
+2025-05-21 16:05:05,522 - INFO - XY_FITS_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.fits
+2025-05-21 16:05:05,523 - INFO - XY_TXT_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.txt
+2025-05-21 16:05:05,523 - INFO - WCS_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.wcs
+2025-05-21 16:05:05,523 - INFO - SEX_CATALOG_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/k1-imp.fts.sx
+2025-05-21 16:05:05,523 - INFO - REGION_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/elik1-imp-field.reg
+2025-05-21 16:05:05,523 - INFO - ASTROMETRY_CONFIG_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/conf/astrometry.cfg
+2025-05-21 16:05:06,431 - INFO - region.py завершен.
+2025-05-21 16:05:06,431 - INFO - ===========  Запуск astrometry.py ===========
+2025-05-21 16:05:06,431 - INFO - Команда: /home/hellnim/anaconda3/envs/radec/bin/python /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/astrometry.py /home/hellnim/Downloads/radecWork-main/astro_pipeline/input/Meteor1_19R_00001.fits
+2025-05-21 16:05:07,872 - INFO - STDOUT astrometry.py:
+Elapsed time: 0.954725 seconds.
+2025-05-21 16:05:07,872 - WARNING - STDERR astrometry.py:
+2025-05-21 16:05:06,789 - INFO - ROOT_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline
+2025-05-21 16:05:06,790 - INFO - SCRIPTS_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main
+2025-05-21 16:05:06,790 - INFO - INPUT_DIR / LOAD_FILE_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/input
+2025-05-21 16:05:06,790 - INFO - MAIN_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main
+2025-05-21 16:05:06,790 - INFO - CONFIGS_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/conf
+2025-05-21 16:05:06,790 - INFO - TMP_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp
+2025-05-21 16:05:06,790 - INFO - PROCESSED_FITS_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/processed
+2025-05-21 16:05:06,790 - INFO - PROCESSED_RESULTS_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/output
+2025-05-21 16:05:06,790 - INFO - LOCK_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/monitor_lock
+2025-05-21 16:05:06,790 - INFO - PROCESSING_LOG_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/processing_log.txt
+2025-05-21 16:05:06,790 - INFO - XY_FITS_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.fits
+2025-05-21 16:05:06,790 - INFO - XY_TXT_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.txt
+2025-05-21 16:05:06,790 - INFO - WCS_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.wcs
+2025-05-21 16:05:06,790 - INFO - SEX_CATALOG_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/k1-imp.fts.sx
+2025-05-21 16:05:06,790 - INFO - REGION_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/elik1-imp-field.reg
+2025-05-21 16:05:06,790 - INFO - ASTROMETRY_CONFIG_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/conf/astrometry.cfg
+2025-05-21 16:05:06,791 - INFO - Рассчитанный масштаб на основе заголовка и FOCALLEN_STATIC (551 мм): 4.2226 arcsec/pix
+2025-05-21 16:05:06,798 - INFO - RA (заголовок): 12 15 11.000, DEC (заголовок): +59 25 10.000
+2025-05-21 16:05:06,798 - INFO - RA (deg): 183.79583, DEC (deg): 59.41944
+2025-05-21 16:05:06,798 - INFO - Executing solve-field command: solve-field --config /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/conf/astrometry.cfg --overwrite --downsample 4 --cpulimit 3600 --no-plots --scale-units arcsecperpix --scale-low 2.0918 --scale-high 4.5041 --x-column X_CENTER --y-column Y_CENTER --sort-column AREA --width 3200 --height 2140 --ra 183.7958333333333 --dec 59.419444444444444 --radius 4.504134571261457 /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.fits
+2025-05-21 16:05:07,753 - INFO - solve-field успешно завершен.
+2025-05-21 16:05:07,757 - INFO - Найден WCS файл: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.wcs
+2025-05-21 16:05:07,757 - INFO - Executing new-wcs command: /home/hellnim/anaconda3/envs/radec/bin/new-wcs -i /home/hellnim/Downloads/radecWork-main/astro_pipeline/input/Meteor1_19R_00001.fits -w /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.wcs -o /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/WCS_Meteor1_19R_00001.fits
+2025-05-21 16:05:07,761 - INFO - new-wcs успешно завершен.
+2025-05-21 16:05:07,762 - INFO - Сохранение обработанного FITS файла в /home/hellnim/Downloads/radecWork-main/astro_pipeline/processed/TMP_Meteor1_19R_00001.fits
+WARNING: File may have been truncated: actual file length (14400) is smaller than the expected size (6863040) [astropy.io.fits.file]
+2025-05-21 16:05:07,765 - WARNING - File may have been truncated: actual file length (14400) is smaller than the expected size (6863040)
+2025-05-21 16:05:07,787 - INFO - Обработанный FITS файл успешно сохранен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/processed/TMP_Meteor1_19R_00001.fits
+2025-05-21 16:05:07,787 - INFO - Работа скрипта astrometry.py завершена.
+2025-05-21 16:05:07,874 - INFO - astrometry.py завершен.
+2025-05-21 16:05:07,874 - INFO - ===========  Запуск radec_without_mode.py ===========
+2025-05-21 16:05:07,874 - INFO - Команда: /home/hellnim/anaconda3/envs/radec/bin/python /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/radec_without_mode.py
+2025-05-21 16:05:09,722 - INFO - STDOUT radec_without_mode.py:
+First cluster:
+ X: 1548.498, Y: 1043.8621
+RA and DEC: 
+RA: 12:14:01.74, DEC: +59:32:08.41
+Second cluster:
+ X: 2397.6475, Y: 120.3495
+ X: 1433.8129, Y: 135.0917
+ X: 937.1663, Y: 210.7143
+ X: 2688.8296, Y: 426.6262
+ X: 2734.6008, Y: 746.6065
+ X: 3057.1396, Y: 776.408
+ X: 688.826, Y: 1005.1141
+ X: 2710.5112, Y: 2065.9915
+ X: 2449.8804, Y: 1973.9285
+ X: 428.9099, Y: 1596.1282
+ X: 2603.697, Y: 1392.0243
+ X: 603.1409, Y: 1492.4025
+ X: 2429.126, Y: 1396.8506
+ X: 544.2584, Y: 1297.4463
+RA and DEC: 
+RA: 12:22:04.45, DEC: +60:36:18.25
+RA: 12:12:52.97, DEC: +60:35:53.10
+RA: 12:08:10.21, DEC: +60:29:58.18
+RA: 12:24:45.10, DEC: +60:14:10.51
+RA: 12:25:04.66, DEC: +59:51:36.49
+RA: 12:28:04.08, DEC: +59:48:31.79
+RA: 12:06:04.81, DEC: +59:33:42.42
+RA: 12:24:26.40, DEC: +58:19:01.77
+RA: 12:22:08.26, DEC: +58:26:03.64
+RA: 12:03:54.82, DEC: +58:51:31.52
+RA: 12:23:40.53, DEC: +59:06:37.38
+RA: 12:05:27.33, DEC: +58:59:17.23
+RA: 12:22:04.94, DEC: +59:06:38.67
+RA: 12:04:51.10, DEC: +59:12:49.11
+2025-05-21 16:05:09,723 - WARNING - STDERR radec_without_mode.py:
+2025-05-21 16:05:08,001 - INFO - ROOT_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline
+2025-05-21 16:05:08,002 - INFO - SCRIPTS_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main
+2025-05-21 16:05:08,002 - INFO - INPUT_DIR / LOAD_FILE_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/input
+2025-05-21 16:05:08,002 - INFO - MAIN_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main
+2025-05-21 16:05:08,002 - INFO - CONFIGS_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/conf
+2025-05-21 16:05:08,002 - INFO - TMP_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp
+2025-05-21 16:05:08,002 - INFO - PROCESSED_FITS_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/processed
+2025-05-21 16:05:08,002 - INFO - PROCESSED_RESULTS_DIR установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/output
+2025-05-21 16:05:08,002 - INFO - LOCK_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/monitor_lock
+2025-05-21 16:05:08,002 - INFO - PROCESSING_LOG_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/processing_log.txt
+2025-05-21 16:05:08,002 - INFO - XY_FITS_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.fits
+2025-05-21 16:05:08,002 - INFO - XY_TXT_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.txt
+2025-05-21 16:05:08,002 - INFO - WCS_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/XY.wcs
+2025-05-21 16:05:08,002 - INFO - SEX_CATALOG_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/k1-imp.fts.sx
+2025-05-21 16:05:08,002 - INFO - REGION_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/elik1-imp-field.reg
+2025-05-21 16:05:08,002 - INFO - ASTROMETRY_CONFIG_FILE установлен: /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/conf/astrometry.cfg
+2025-05-21 16:05:08,990 - INFO - The fits file is selected: /home/hellnim/Downloads/radecWork-main/astro_pipeline/processed/TMP_Meteor1_19R_00001.fits
+WARNING: FITSFixedWarning: 'datfix' made the change 'Set MJD-OBS to 60518.812347 from DATE-OBS.
+Set MJD-AVG to 60518.812348 from DATE-AVG.
+Set MJD-END to 60518.812349 from DATE-END'. [astropy.wcs.wcs]
+2025-05-21 16:05:09,005 - WARNING - FITSFixedWarning: 'datfix' made the change 'Set MJD-OBS to 60518.812347 from DATE-OBS.
+Set MJD-AVG to 60518.812348 from DATE-AVG.
+Set MJD-END to 60518.812349 from DATE-END'.
+Warning: Ignoring XDG_SESSION_TYPE=wayland on Gnome. Use QT_QPA_PLATFORM=wayland to run on Wayland anyway.
+2025-05-21 16:05:09,723 - INFO - radec_without_mode.py завершен.
+2025-05-21 16:05:09,723 - INFO - Удаление обработанного файла: Meteor1_19R_00001.fits
+2025-05-21 16:05:09,727 - INFO - Очистка файла /home/hellnim/Downloads/radecWork-main/astro_pipeline/main/src/tmp/processing_log.txt
+2025-05-21 16:05:09,728 - INFO - --- Обработка файла Meteor1_19R_00001.fits завершена успешно ---
+
+2025-05-21 16:05:09,729 - INFO - Блокировка снята для Meteor1_19R_00001.fits
+2025-05-21 16:08:18,207 - INFO - Мониторинг остановлен пользователем.
+2025-05-21 16:08:18,208 - INFO - Монитор завершил работу.
+2025-05-21 16:08:18,208 - INFO - test log file after start monitor.py
