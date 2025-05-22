@@ -17,29 +17,29 @@ import path
 
 def process_file(file_path: Path):
     """
-    Обрабатывает один FITS-файл, пропуская его через весь конвейер Python-скриптов
-    и внешних утилит. Весь вывод субпроцессов логируется.
+    It processes one fits file, letting it through the entire conveyor of the Python scripts
+And external utilities.The entire conclusion of the offenses is logged in.
 
     Args:
-        file_path (Path): Полный путь к файлу, который нужно обработать (объект Path).
+        file_path (Path): The full path to the file that you need to process (object is Path).
     """
-    logging.info(f"\n--- Начинаем обработку файла: {file_path.name} ---")
+    logging.info(f"\n--- We start processing the file: {file_path.name} ---")
 
     try:
         # 1. Записываем имя файла в лог для отслеживания (используется radec скриптами)
-        logging.info(f"Записываем имя файла в {path.PROCESSING_LOG_FILE}")
+        logging.info(f"Record the name of the file in {path.PROCESSING_LOG_FILE}")
         path.PROCESSING_LOG_FILE.write_text(str(file_path))
 
         # Функция для запуска субпроцесса и логирования его вывода
         def run_and_log_subprocess(command_list, description):
-            logging.info(f'===========  Запуск {description} ===========')
-            logging.info(f"Команда: {' '.join(map(str, command_list))}") # Логируем команду
+            logging.info(f'===========  Launch {description} ===========')
+            logging.info(f"Command: {' '.join(map(str, command_list))}") # Логируем команду
             result = subprocess.run(command_list, capture_output=True, text=True, check=True, encoding='utf-8')
             if result.stdout:
                 logging.info(f"STDOUT {description}:\n{result.stdout.strip()}")
             if result.stderr:
                 logging.warning(f"STDERR {description}:\n{result.stderr.strip()}")
-            logging.info(f'{description} завершен.')
+            logging.info(f'{description} Completed.')
 
         # 2. Запуск config_setting.py
         run_and_log_subprocess([sys.executable, str(SCRIPTS_DIR / "config_setting.py"), str(file_path)], "config_setting.py")
@@ -55,45 +55,45 @@ def process_file(file_path: Path):
 
         # 6. Проверка существования XY.fits (если он критичен для дальнейшей работы)
         if not path.XY_FITS_FILE.exists() or path.XY_FITS_FILE.stat().st_size == 0:
-            logging.error(f"Ошибка: Файл {path.XY_FITS_FILE} не был создан или пуст после обработки.")
-            raise RuntimeError(f"Отсутствует или пустой файл {path.XY_FITS_FILE}")
+            logging.error(f"Error: File {path.XY_FITS_FILE} was not created or empty after processing.")
+            raise RuntimeError(f"Absent or empty file {path.XY_FITS_FILE}")
 
         # 7. Удаление исходного файла после успешной обработки
-        logging.info(f"Удаление обработанного файла: {file_path.name}")
+        logging.info(f"Removing the processed file: {file_path.name}")
         file_path.unlink()
 
         # 8. Очистка лога обработки
-        logging.info(f"Очистка файла {path.PROCESSING_LOG_FILE}")
+        logging.info(f"File cleaning {path.PROCESSING_LOG_FILE}")
         path.PROCESSING_LOG_FILE.write_text("")
 
-        logging.info(f"--- Обработка файла {file_path.name} завершена успешно ---\n")
+        logging.info(f"--- File processing {file_path.name} completed successfully ---\n")
 
     except subprocess.CalledProcessError as e:
-        logging.error(f"Ошибка выполнения скрипта/команды: {e.cmd}")
-        logging.error(f"Код возврата: {e.returncode}")
+        logging.error(f"An error of the script/team: {e.cmd}")
+        logging.error(f"Return code: {e.returncode}")
         if e.stdout:
-            logging.error(f"STDOUT (ошибка):\n{e.stdout.strip()}")
+            logging.error(f"STDOUT (error):\n{e.stdout.strip()}")
         if e.stderr:
-            logging.error(f"STDERR (ошибка):\n{e.stderr.strip()}")
-        logging.error(f"Обработка файла {file_path.name} завершилась с ошибкой. Пропускаем.\n")
+            logging.error(f"STDERR (error):\n{e.stderr.strip()}")
+        logging.error(f"File processing {file_path.name} It ended with an error.We miss.\n")
     except FileNotFoundError as e:
-        logging.error(f"Ошибка: Не найден файл или команда: {e}")
-        logging.error(f"Обработка файла {file_path.name} завершилась с ошибкой. Пропускаем.\n")
+        logging.error(f"Error: NOT File: {e}")
+        logging.error(f"File processing {file_path.name} It ended with an error.We miss.\n")
     except RuntimeError as e:
-        logging.error(f"Ошибка обработки: {e}")
-        logging.error(f"Обработка файла {file_path.name} завершилась с ошибкой. Пропускаем.\n")
+        logging.error(f"Processing error: {e}")
+        logging.error(f"File processing {file_path.name} It ended with an error.We miss.\n")
     except Exception as e:
-        logging.exception(f"Неожиданная ошибка при обработке файла {file_path.name}:")
-        logging.error(f"Обработка файла {file_path.name} завершилась с ошибкой. Пропускаем.\n")
+        logging.exception(f"Unexpected error when processing a file {file_path.name}:")
+        logging.error(f"File processing {file_path.name} It ended with an error.We miss.\n")
     finally:
         # Убедимся, что лог-файл всегда очищается, если обработка не завершилась успешно до удаления файла
         if path.PROCESSING_LOG_FILE.exists() and path.PROCESSING_LOG_FILE.read_text() == str(file_path):
-             logging.warning(f"Лог-файл {path.PROCESSING_LOG_FILE} не был очищен после ошибки, очищаю.")
+             logging.warning(f"Log File {path.PROCESSING_LOG_FILE} I was not cleared after the error, I clean.")
              path.PROCESSING_LOG_FILE.write_text("")
 
 class NewFileHandler(FileSystemEventHandler):
     """
-    Обработчик событий файловой системы, реагирующий на создание новых файлов.
+    File system events responding to creating new files.
     """
     def __init__(self, processing_function, lock_file_path):
         super().__init__()
@@ -103,25 +103,25 @@ class NewFileHandler(FileSystemEventHandler):
 
     def on_created(self, event):
         """
-        Вызывается, когда файл или директория созданы.
-        Обрабатывает только файлы, игнорируя директории.
+        It is called when the file or directory is created.
+        Processes only files, ignoring the directory.
         """
         if event.is_directory:
             return
 
         file_path = Path(event.src_path)
-        logging.info(f"Обнаружен новый файл: {file_path.name}")
+        logging.info(f"A new file has been discovered: {file_path.name}")
 
         # Попытка получить блокировку
         try:
             with self.lock:
-                logging.info(f"Блокировка получена для {file_path.name}")
+                logging.info(f"Blocking is obtained for {file_path.name}")
                 self.processing_function(file_path)
-                logging.info(f"Блокировка снята для {file_path.name}")
+                logging.info(f"The lock is removed for {file_path.name}")
         except Timeout:
-            logging.warning(f"Не удалось получить блокировку для {file_path.name}. Процесс обработки уже запущен. Пропускаем.")
+            logging.warning(f"Failed to get a lock for {file_path.name}. The processing process has already been launched. We miss.")
         except Exception as e:
-            logging.error(f"Ошибка при работе с блокировкой для {file_path.name}: {e}")
+            logging.error(f"Error when working with blocking for {file_path.name}: {e}")
 
 # Получаем путь к директории, где находится этот скрипт (ASTRO_PIPELINE/)
 SCRIPTS_DIR = Path(__file__).resolve().parent
@@ -142,7 +142,7 @@ def main():
         except Exception as e:
             # Если не удалось удалить старый файл (например, он используется),
             # мы просто выводим сообщение об ошибке в консоль, так как логирование еще не настроено
-            print(f"ОШИБКА: Не удалось очистить старый лог-файл {LOG_FILE_PATH}: {e}", file=sys.stderr)
+            print(f"Error: failed to clean the old log-file {LOG_FILE_PATH}: {e}", file=sys.stderr)
 
 
     # Очистка всех предыдущих обработчиков логирования
@@ -161,7 +161,7 @@ def main():
                         ])
 
     # Теперь, когда логирование настроено, мы можем логировать статус очистки файла
-    logging.info(f"Лог-файл {LOG_FILE_PATH} очищен/создан при запуске.")
+    logging.info(f"Log File {LOG_FILE_PATH} Cleaned/created at launch.")
 
 
     # --- Остальная часть логики основной функции (создание директорий, настройка наблюдателя, цикл) ---
@@ -174,15 +174,15 @@ def main():
     path.CONFIGS_DIR.mkdir(parents=True, exist_ok=True)
     # Директория логов уже создана выше
 
-    logging.info("Все необходимые директории проекта проверены/созданы.")
+    logging.info("All the necessary project directors have been tested/created.")
 
     event_handler = NewFileHandler(process_file, path.LOCK_FILE)
     observer = Observer()
     observer.schedule(event_handler, str(path.LOAD_FILE_DIR), recursive=False) # Мониторим только саму директорию
 
-    logging.info(f"--- Запуск мониторинга директории: {path.LOAD_FILE_DIR} ---")
-    logging.info(f"Используется временная директория: {path.TMP_DIR}")
-    logging.info(f"Используется лок-файл: {path.LOCK_FILE}")
+    logging.info(f"--- Directorate of monitoring of directory: {path.LOAD_FILE_DIR} ---")
+    logging.info(f"The temporary directory is used: {path.TMP_DIR}")
+    logging.info(f"Lock file is used: {path.LOCK_FILE}")
 
     observer.start()
 
@@ -191,12 +191,12 @@ def main():
             time.sleep(1) # Ждем 1 секунду, чтобы не загружать CPU
     except KeyboardInterrupt:
         observer.stop()
-        logging.info("Мониторинг остановлен пользователем.")
+        logging.info("Monitoring is stopped by the user.")
     except Exception as e:
-        logging.exception("Произошла непредвиденная ошибка в основном цикле мониторинга:")
+        logging.exception("An unforeseen error of the main monitoring cycle occurred:")
     finally:
         observer.join()
-        logging.info("Монитор завершил работу.")
+        logging.info("The monitor completed the work.")
 
     logging.info("test log file after start monitor.py")
 
