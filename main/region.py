@@ -26,7 +26,7 @@ Input information format:
 output format:
     ellipse(   269.4581,   397.0928,   46.4340,   1.7650,  -69.43)
     
-Запускать под оболочкой astroconda (есть конфликт в numpy версиях  
+Launch under the sheath Astroconda (there is a conflict in Numpy versions  
 1.21.5 в astropy vs. 1.26.4 в seiferts etc.
 
 """
@@ -51,10 +51,10 @@ try:
     X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX, TH, FLAG, FLUX = utils.load_sextractor_genfromtxt(str(sextractor_results_file))
     # load_sextractor_genfromtxt возвращает распакованные массивы, как np.genfromtxt(..., unpack=True)
 except FileNotFoundError:
-    print(f"Error: Результаты SExtractor не найдены по пути {sextractor_results_file}.")
+    print(f"Error: SExtractor results were not found on the way {sextractor_results_file}.")
     exit(1) # Выходим, если файл не найден
 except IOError as e:
-    print(f"Error: Не удалось загрузить данные из файла результатов SExtractor: {e}")
+    print(f"Error: Failed to download data from the results file SExtractor: {e}")
     exit(1) # Выходим при ошибке чтения
 
 # --- Создание Region File для DS9 ---

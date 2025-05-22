@@ -13,12 +13,12 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # ROOT_DIR: Корневая директория проекта (там, где находится path.py)
 ROOT_DIR = Path(__file__).resolve().parent.parent
-logging.info(f"ROOT_DIR установлен: {ROOT_DIR}")
+logging.info(f"ROOT_DIR installed: {ROOT_DIR}")
 
 # SCRIPTS_DIR: Директория со всеми основными Python-скриптами.
 # Согласно вашей структуре, скрипты находятся прямо в ROOT_DIR.
 SCRIPTS_DIR = Path(__file__).resolve().parent
-logging.info(f"SCRIPTS_DIR установлен: {SCRIPTS_DIR}")
+logging.info(f"SCRIPTS_DIR installed: {SCRIPTS_DIR}")
 
 
 # --- Рабочие директории ---
@@ -27,36 +27,36 @@ logging.info(f"SCRIPTS_DIR установлен: {SCRIPTS_DIR}")
 INPUT_DIR = ROOT_DIR / "input"
 # Если вы используете LOAD_FILE_DIR как директорию для мониторинга, она должна быть такой же
 LOAD_FILE_DIR = INPUT_DIR # Сохраняем это имя для совместимости с monitor.py
-logging.info(f"INPUT_DIR / LOAD_FILE_DIR установлен: {LOAD_FILE_DIR}")
+logging.info(f"INPUT_DIR / LOAD_FILE_DIR installed: {LOAD_FILE_DIR}")
 
 
 # MAIN_DIR: Директория 'main' на верхнем уровне
 MAIN_DIR = SCRIPTS_DIR
-logging.info(f"MAIN_DIR установлен: {MAIN_DIR}")
+logging.info(f"MAIN_DIR installed: {MAIN_DIR}")
 
 
 # CONFIGS_DIR: Директория с файлами конфигурации Astrometry.net и SExtractor
 # Согласно структуре: ASTRO_PIPELINE/main/conf/
 CONFIGS_DIR = MAIN_DIR / "conf"
-logging.info(f"CONFIGS_DIR установлен: {CONFIGS_DIR}")
+logging.info(f"CONFIGS_DIR installed: {CONFIGS_DIR}")
 
 
 # TMP_DIR: Временная директория для промежуточных файлов
 # Согласно структуре: ASTRO_PIPELINE/main/src/monitor/tmp/
 TMP_DIR = MAIN_DIR / "src" / "tmp"
-logging.info(f"TMP_DIR установлен: {TMP_DIR}")
+logging.info(f"TMP_DIR installed: {TMP_DIR}")
 
 
 # PROCESSED_FITS_DIR: Директория для обработанных FITS-файлов (с WCS)
 # Согласно структуре: ASTRO_PIPELINE/processed/
 PROCESSED_FITS_DIR = ROOT_DIR / "processed"
-logging.info(f"PROCESSED_FITS_DIR установлен: {PROCESSED_FITS_DIR}")
+logging.info(f"PROCESSED_FITS_DIR installed: {PROCESSED_FITS_DIR}")
 
 
 # PROCESSED_RESULTS_DIR: Директория для выходных текстовых файлов с результатами
 # Согласно структуре: ASTRO_PIPELINE/output/
 PROCESSED_RESULTS_DIR = ROOT_DIR / "output"
-logging.info(f"PROCESSED_RESULTS_DIR установлен: {PROCESSED_RESULTS_DIR}")
+logging.info(f"PROCESSED_RESULTS_DIR installed: {PROCESSED_RESULTS_DIR}")
 
 
 # Временная директория, используемая SExtractor для чек-изображений (из config_setting.py)
@@ -68,37 +68,37 @@ TEMP_SEXTRACTOR_DIR = TMP_DIR / TEMP_SEXTRACTOR_DIR_NAME
 
 # Путь к файлу блокировки для monitor.py
 LOCK_FILE = TMP_DIR / "monitor_lock"
-logging.info(f"LOCK_FILE установлен: {LOCK_FILE}")
+logging.info(f"LOCK_FILE installed: {LOCK_FILE}")
 
 # Путь к лог-файлу, который используется для передачи имени файла между скриптами
 PROCESSING_LOG_FILE = TMP_DIR / "processing_log.txt"
-logging.info(f"PROCESSING_LOG_FILE установлен: {PROCESSING_LOG_FILE}")
+logging.info(f"PROCESSING_LOG_FILE installed: {PROCESSING_LOG_FILE}")
 
 # Путь к выходному FITS-файлу SExtractor (с координатами XY)
 XY_FITS_FILE = TMP_DIR / "XY.fits"
-logging.info(f"XY_FITS_FILE установлен: {XY_FITS_FILE}")
+logging.info(f"XY_FITS_FILE installed: {XY_FITS_FILE}")
 
 XY_TXT_FILE = TMP_DIR / "XY.txt"
-logging.info(f"XY_TXT_FILE установлен: {XY_TXT_FILE}")
+logging.info(f"XY_TXT_FILE installed: {XY_TXT_FILE}")
 
 # Путь к WCS-файлу, создаваемому solve-field
 WCS_FILE = TMP_DIR / "XY.wcs"
-logging.info(f"WCS_FILE установлен: {WCS_FILE}")
+logging.info(f"WCS_FILE installed: {WCS_FILE}")
 
 # Путь к выходному каталогу SExtractor (с подробными параметрами объектов)
 SEX_CATALOG_FILE = TMP_DIR / "k1-imp.fts.sx" # Имя из вашей структуры
-logging.info(f"SEX_CATALOG_FILE установлен: {SEX_CATALOG_FILE}")
+logging.info(f"SEX_CATALOG_FILE installed: {SEX_CATALOG_FILE}")
 
 # Путь к файлу региона DS9
 REGION_FILE = TMP_DIR / "elik1-imp-field.reg" # Имя из вашей структуры
-logging.info(f"REGION_FILE установлен: {REGION_FILE}")
+logging.info(f"REGION_FILE installed: {REGION_FILE}")
 
 
 # --- Конфигурационные файлы ---
 SEX_CONFIG_FILE = CONFIGS_DIR / "default.sex" 
 # Путь к файлу конфигурации Astrometry.net
 ASTROMETRY_CONFIG_FILE = CONFIGS_DIR / "astrometry.cfg"
-logging.info(f"ASTROMETRY_CONFIG_FILE установлен: {ASTROMETRY_CONFIG_FILE}")
+logging.info(f"ASTROMETRY_CONFIG_FILE installed: {ASTROMETRY_CONFIG_FILE}")
 
 
 # --- Пути к внешним утилитам ---
@@ -179,7 +179,7 @@ def get_new_wcs_path():
 #         logging.info(f"new-wcs найден в системном PATH.")
 #         return Path(new_wcs_from_path) # Возвращаем имя команды, чтобы subprocess.run нашел ее в PATH
 
-#     logging.error("Не удалось найти исполняемый файл 'new-wcs'. Убедитесь, что astrometry.net установлен и 'new-wcs' доступен в PATH или по указанным путям.")
+#     logging.error("Не удалось найти исполняемый файл 'new-wcs'. Убедитесь, что astrometry.net installed и 'new-wcs' доступен в PATH или по указанным путям.")
 #     # Возвращаем имя команды, чтобы subprocess.run попробовал найти ее в PATH,
 #     # но будет ошибка, если ее там нет.
 #     return Path("new-wcs")

@@ -139,8 +139,8 @@ def main():
         fits_filename, base_filename = utils.choose_fits_file(str(path.PROCESSING_LOG_FILE), [str(path.TMP_DIR), str(path.PROCESSED_FITS_DIR)])
         fits_file_path = Path(fits_filename) # Преобразуем результат в Path объект
     except (FileNotFoundError, ValueError, IOError) as e:
-        print(f"Ошибка при выборе FITS файла: {e}")
-        logging.error(f"Ошибка при выборе FITS файла: {e}")
+        print(f"Error when choosing a FITS file: {e}")
+        logging.error(f"Error when choosing a FITS file: {e}")
         sys.exit(1) # Критическая ошибка, не можем продолжить без FITS файла
 
     # try:
@@ -160,8 +160,8 @@ def main():
             'FLAG': FLAG, 'FLUX': FLUX
         })
     except (FileNotFoundError, IOError) as e:
-        print(f"Ошибка при загрузке данных из файла каталога: {e}")
-        logging.error(f"Ошибка при загрузке данных из файла каталога: {e}")
+        print(f"Error when downloading data from a catalog file: {e}")
+        logging.error(f"Error when downloading data from a catalog file: {e}")
         sys.exit(1) # Критическая ошибка, не можем продолжить без данных
 
     processed_table = utils.preprocess_data(data_table, x_min=100, x_max=3100, y_min=50, y_max=2105)

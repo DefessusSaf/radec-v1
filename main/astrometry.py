@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # Получаем имя файла из аргументов командной строки
 if len(sys.argv) != 2:
-    print(f"Использование: python {sys.argv[0]} <путь_к_FITS_Файлу>")
+    print(f"Usage: python {sys.argv[0]} <path_to_FITS_file>")
     sys.exit(1)
 
 # Преобразуем входной путь в объект Path
@@ -25,7 +25,7 @@ input_fits_path = Path(sys.argv[1])
 
 # Убедитесь, что файл существует
 if not input_fits_path.exists():
-    logging.error(f"Ошибка: Входной файл не существует: {input_fits_path}")
+    logging.error(f"Error: the input file does not exist: {input_fits_path}")
     print(f"Error: {input_fits_path} does not exist")
     sys.exit(1)
 
@@ -51,7 +51,7 @@ try:
         header = hdul[0].header
         image_data = hdul[0].data
 except Exception as e:
-    logging.error(f"Ошибка при чтении FITS файла {input_fits_path}: {e}")
+    logging.error(f"Error reading FITS file {input_fits_path}: {e}")
     print(f"Error reading FITS file {input_fits_path}: {e}")
     sys.exit(1)
 
@@ -65,7 +65,7 @@ try:
     RA = header['OBJCTRA']
     DEC = header['OBJCTDEC']
 except KeyError as e:
-    logging.error(f"Отсутствует обязательный ключ в заголовке FITS: {e}")
+    logging.error(f"Missing key in FITS header FITS: {e}")
     print(f"Error: Missing key in FITS header: {e}")
     sys.exit(1)
 
@@ -95,13 +95,13 @@ HEIGHT = NX # Использование NX для высоты (NAXIS2)
 
 try:
     calculated_scale = PIXSIZE / FOCALLEN_STATIC * _u.rad.to('arcsec') * _u.um.to('mm')
-    logging.info(f"Рассчитанный масштаб на основе заголовка и FOCALLEN_STATIC ({FOCALLEN_STATIC} мм): {calculated_scale:.4f} arcsec/pix")
+    logging.info(f"Calculated scale based on the heading and FOCALLEN_STATIC ({FOCALLEN_STATIC} mm): {calculated_scale:.4f} arcsec/pix")
     # Решаем, какой масштаб использовать: рассчитанный или статический.
     # Если статический SCALE_STATIC=0.08 важен, используем его. Если нет, то calculated_scale.
     # Предположим, что рассчитанный масштаб предпочтительнее, но используем 10% диапазон вокруг него.
     SCALE_FOR_SOLVE = calculated_scale
 except Exception as e:
-    logging.warning(f"Не удалось рассчитать масштаб: {e}. Используем статический SCALE_STATIC={SCALE_STATIC}")
+    logging.warning(f"Failed to calculate the scale: {e}. We use static SCALE_STATIC={SCALE_STATIC}")
     SCALE_FOR_SOLVE = SCALE_STATIC
 
 
@@ -131,12 +131,12 @@ SEARCH_RAD = SCALE_HIGH
 # Преобразуем RA/DEC из заголовка в объект SkyCoord
 try:
     COORDS = coordinates.SkyCoord(RA, DEC, unit=('hour', 'deg'), frame='icrs', equinox='J2000')
-    logging.info(f"RA (заголовок): {RA}, DEC (заголовок): {DEC}")
+    logging.info(f"RA (header): {RA}, DEC (header): {DEC}")
     logging.info(f"RA (deg): {COORDS.ra.deg:.5f}, DEC (deg): {COORDS.dec.deg:.5f}")
     RA_DEG = COORDS.ra.deg
     DEC_DEG = COORDS.dec.deg
 except Exception as e:
-    logging.warning(f"Не удалось преобразовать RA/DEC из заголовка: {e}. Будет использоваться поиск без указания центра.")
+    logging.warning(f"It was not possible to transform RA/DEC From the title: {e}. Search without specifying the center will be used.")
     RA_DEG = None
     DEC_DEG = None
     SEARCH_RAD_DEG = None # Если нет центра, нет и радиуса поиска
@@ -191,38 +191,38 @@ try:
     TicToc.toc() # Конец отсчета времени
 
     if result_solve.returncode != 0:
-        logging.error(f"solve-field завершился с ошибкой (код {result_solve.returncode}).")
+        logging.error(f"solve-field ended with an error (code {result_solve.returncode}).")
         logging.error(f"Stderr:\n{result_solve.stderr}")
-        raise RuntimeError(f"Ошибка выполнения solve-field.")
+        raise RuntimeError(f"Error execution solve-field.")
     else:
-        logging.info("solve-field успешно завершен.")
+        logging.info("solve-field Successfully completed.")
         # logging.debug(f"Stdout:\n{result_solve.stdout}")
         if result_solve.stderr:
              logging.warning(f"Stderr (Possible warnings from solve-field):\n{result_solve.stderr}")
 
 except FileNotFoundError:
-    logging.error("Ошибка: Команда 'solve-field' не найдена. Убедитесь, что astrometry.net установлен и доступен в PATH.")
+    logging.error("Error: Command 'solve-field' command not found. Make sure astrometry.net is installed and in your PATH.")
     print("Error: 'solve-field' command not found. Make sure astrometry.net is installed and in your PATH.")
     sys.exit(1) # Критическая ошибка, без астрометрии дальше нет смысла
 except RuntimeError as e:
-    logging.error(f"Ошибка при выполнении solve-field: {e}")
+    logging.error(f"Error during solve-field execution: {e}")
     print(f"Error during solve-field execution: {e}")
     sys.exit(1) # Критическая ошибка
 except Exception as e:
-    logging.exception("Неожиданная ошибка при выполнении solve-field:")
+    logging.exception("An unforeseen error occurred during solve-field:")
     print(f"An unforeseen error occurred during solve-field: {e}")
     sys.exit(1) # Непредвиденная критическая ошибка
 
 
 # Проверка создания файла WCS
 if not wcs_file.exists() or wcs_file.stat().st_size == 0:
-    logging.error(f"Ошибка: solve-field не создал WCS файл по ожидаемому пути: {wcs_file}")
+    logging.error(f"Error: solve-field did not create the WCS file at: {wcs_file}")
     print(f"Error: solve-field did not create the WCS file at {wcs_file}")
     # Оригинальный скрипт пытался запустить alt_cmd здесь, но он закомментирован.
     # Если WCS файл не создан, дальнейшие шаги бессмысленны.
     sys.exit(1) # Критическая ошибка
 
-logging.info(f"Найден WCS файл: {wcs_file}")
+logging.info(f"WCS file found: {wcs_file}")
 
 
 # Обновление WCS в исходном файле с помощью утилиты new-wcs
@@ -247,31 +247,31 @@ try:
     result_new_wcs = subprocess.run(cmd_new_wcs, capture_output=True, text=True, check=False)
 
     if result_new_wcs.returncode != 0:
-        logging.error(f"new-wcs завершился с ошибкой (код {result_new_wcs.returncode}).")
+        logging.error(f"new-wcs ended with an error (code {result_new_wcs.returncode}).")
         logging.error(f"Stderr:\n{result_new_wcs.stderr}")
-        raise RuntimeError(f"Ошибка выполнения new-wcs.")
+        raise RuntimeError(f"Error execution new-wcs.")
     else:
-        logging.info("new-wcs успешно завершен.")
+        logging.info("new-wcs Successfully completed.")
         # logging.debug(f"Stdout:\n{result_new_wcs.stdout}")
         if result_new_wcs.stderr:
              logging.warning(f"Stderr (Possible warnings from new-wcs):\n{result_new_wcs.stderr}")
 
 except FileNotFoundError:
-    logging.error("Ошибка: Команда 'new-wcs' не найдена. Убедитесь, что astrometry.net установлен и доступен через пути, указанные в path.py.")
+    logging.error("Error: 'new-wcs' command not found. Make sure astrometry.net is installed and accessible via paths in path.py.")
     print("Error: 'new-wcs' command not found. Make sure astrometry.net is installed and accessible via paths in path.py.")
     sys.exit(1) # Критическая ошибка
 except RuntimeError as e:
-    logging.error(f"Ошибка при выполнении new-wcs: {e}")
+    logging.error(f"Error during new-wcs execution: {e}")
     print(f"Error during new-wcs execution: {e}")
     sys.exit(1) # Критическая ошибка
 except Exception as e:
-    logging.exception("Неожиданная ошибка при выполнении new-wcs:")
+    logging.exception("An unforeseen error occurred during new-wcs:")
     print(f"An unforeseen error occurred during new-wcs: {e}")
     sys.exit(1) # Непредвиденная критическая ошибка
 
 
 # Сохранение обновленного FITS-файла с новым WCS
-logging.info(f"Сохранение обработанного FITS файла в {output_fits_path}")
+logging.info(f"Saving a processed FITS file in {output_fits_path}")
 try:
     # Читаем заголовок из временного файла, созданного new-wcs
     with pyfits.open(temp_wcs_fits_path) as hdul_wcs:
@@ -287,10 +287,10 @@ try:
 
     # Записываем новый FITS файл
     hdul_output.writeto(str(output_fits_path), output_verify='silentfix', overwrite=True)
-    logging.info(f"Обработанный FITS файл успешно сохранен: {output_fits_path}")
+    logging.info(f"Processed FITS file successfully saved: {output_fits_path}")
 
 except Exception as e:
-    logging.error(f'Ошибка при сохранении обработанного FITS файла {output_fits_path}: {e}')
+    logging.error(f'Error saving processed FITS file {output_fits_path}: {e}')
     print(f'Error saving processed FITS file {output_fits_path}: {e}')
     # Не считаем это критической ошибкой для всей программы, но сообщаем о проблеме.
     # sys.exit(1) # Возможно, стоит выйти, если сохранить не удалось?
@@ -299,11 +299,11 @@ except Exception as e:
 if temp_wcs_fits_path.exists():
     try:
         temp_wcs_fits_path.unlink() # Удаляем файл
-        logging.debug(f"Временный файл удален: {temp_wcs_fits_path}")
+        logging.debug(f"The temporary file is deleted: {temp_wcs_fits_path}")
     except OSError as e:
-        logging.warning(f"Не удалось удалить временный файл {temp_wcs_fits_path}: {e}")
+        logging.warning(f"Failed to delete a temporary file {temp_wcs_fits_path}: {e}")
 
-logging.info("Работа скрипта astrometry.py завершена.")
+logging.info("The work of the astrometry.py script is completed.")
 
 # В этом скрипте нет блока if __name__ == "__main__": main(),
 # он просто выполняется сверху вниз при вызове.

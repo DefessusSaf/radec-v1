@@ -147,7 +147,7 @@ def choose_fits_file(log_file_path, fits_dirs):
 # # Функция предварительной обработки данных (фильтрация по координатам), специфичная для этого скрипта (использует QTable)
 # # Оригинальная функция preprocess_data из radec_without_mode.py
 def preprocess_data(table, x_min, x_max, y_min, y_max):
-    """Предварительная обработка данных с использованием QTable."""
+    """Preliminary data processing using QTable."""
     y_mask = (table['Y'] >= y_min) & (table['Y'] <= y_max)
     x_mask = (table['X'] >= x_min) & (table['X'] <= x_max)
     mask = x_mask & y_mask
