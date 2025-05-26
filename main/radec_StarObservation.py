@@ -8,22 +8,27 @@ Detection object and convert pixcoordinates on RA and DEC
 
 import os
 import glob
+import sys
 import numpy as np
 import path
 import astropy.units as u
+import logging
+from pathlib import Path
 import matplotlib.pyplot as plt
 from astropy.io import fits
 from astropy.wcs import WCS
+from astropy.table import QTable
 from astropy.coordinates import Angle
 from astropy.time import Time
 from datetime import timedelta
+import path
 from mpl_toolkits.mplot3d import Axes3D
 from src.utils import utils
 
 
 
 def save_results(coords, fits_filename, base_filename, X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX):
-    output_dir = 'PROCESS_FILE'
+    output_dir = path.PROCESSED_RESULTS_DIR
     os.makedirs(output_dir, exist_ok=True)
     txt_filename = os.path.join(output_dir, f'{base_filename}.txt')
     with open(txt_filename, 'w') as f:
@@ -98,16 +103,43 @@ def star_observation(X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX, fits_filena
 def main():
     DIR = path.TMP_DIR
     fn = path.SEX_CATALOG_FILE
+    # try:
+    #     fits_filename, base_filename = utils.choose_fits_file()
+    # except (FileNotFoundError, ValueError) as e:
+    #     print(e)
+    #     return
     try:
-        fits_filename, base_filename = utils.choose_fits_file()
-    except (FileNotFoundError, ValueError) as e:
-        print(e)
-        return
+        # Используем choose_fits_file из utils, передавая путь к логу и директории поиска FITS
+        # Ищем FITS файл в TMP_DIR и PROCESSED_FITS_DIR (на всякий случай)
+        fits_filename, base_filename = utils.choose_fits_file(str(path.PROCESSING_LOG_FILE), [str(path.TMP_DIR), str(path.PROCESSED_FITS_DIR)])
+        fits_file_path = Path(fits_filename) # Преобразуем результат в Path объект
+    except (FileNotFoundError, ValueError, IOError) as e:
+        print(f"Error when choosing a FITS file: {e}")
+        logging.error(f"Error when choosing a FITS file: {e}")
+        sys.exit(1) # Критическая ошибка, не можем продолжить без FITS файла
 
-    X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX, TH, FLAG, FLUX = utils.load_sextractor_genfromtxt(os.path.join(DIR, fn))
-    # print(f"X: {X}, Y: {Y}, ERRX: {ERRX}, ERRY: {ERRY}, A: {A}, B: {B}, XMIN: {XMIN}, YMIN: {YMIN}, XMAX: {XMAX}, YMAX: {YMAX}, TH: {TH}, FLAG: {FLAG}, FLUX: {FLUX}")
-    
-    X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX, TH, FLAG, FLUX = utils.preprocess_data(X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX, TH, FLAG, FLUX, x_min=25, x_max=4785, y_min=15, y_max=3175)
+    # try:
+    #     data_table = utils.load_sextractor_genfromtxt(f'{fn}')
+    # except Exception as e:
+    #     print(f"Data boot error: {e}")
+    #     return
+
+    try:
+        # Используем локальную load_data, которая читает в QTable
+        data_table = utils.load_sextractor_genfromtxt(fn)
+        X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX, TH, FLAG, FLUX = data_table
+        data_table = QTable({
+            'X': X, 'Y': Y, 'ERRX': ERRX, 'ERRY': ERRY,
+            'A': A, 'B': B, 'XMIN': XMIN, 'YMIN': YMIN,
+            'XMAX': XMAX, 'YMAX': YMAX, 'TH': TH,
+            'FLAG': FLAG, 'FLUX': FLUX
+        })
+    except (FileNotFoundError, IOError) as e:
+        print(f"Error when downloading data from a catalog file: {e}")
+        logging.error(f"Error when downloading data from a catalog file: {e}")
+        sys.exit(1) # Критическая ошибка, не можем продолжить без данных
+
+    processed_table = utils.preprocess_data(data_table, x_min=100, x_max=3100, y_min=50, y_max=2105)
     # print(f"X: {X}, Y: {Y}, ERRX: {ERRX}, ERRY: {ERRY}, A: {A}, B: {B}, XMIN: {XMIN}, YMIN: {YMIN}, XMAX: {XMAX}, YMAX: {YMAX}, TH: {TH}, FLAG: {FLAG}, FLUX: {FLUX}")
     
     star_observation(X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX, fits_filename, base_filename)

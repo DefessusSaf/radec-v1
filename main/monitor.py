@@ -51,7 +51,7 @@ And external utilities.The entire conclusion of the offenses is logged in.
         run_and_log_subprocess([sys.executable, str(SCRIPTS_DIR / "astrometry.py"), str(file_path)], "astrometry.py")
 
         # 5. Запуск radec_without_mode.py
-        run_and_log_subprocess([sys.executable, str(SCRIPTS_DIR / "radec_without_mode.py")], "radec_without_mode.py")
+        run_and_log_subprocess([sys.executable, str(SCRIPTS_DIR / "radec_StarObservation.py")], "radec_StarObservation.py")
 
         # 6. Проверка существования XY.fits (если он критичен для дальнейшей работы)
         if not path.XY_FITS_FILE.exists() or path.XY_FITS_FILE.stat().st_size == 0:
