@@ -25,7 +25,7 @@ from astropy.coordinates import Angle
 from astropy.time import Time
 from datetime import timedelta
 from astropy.table import QTable
-from src.utils import utils
+from main.src.utils import ut
 
 
 
@@ -136,7 +136,7 @@ def main():
     try:
         # Используем choose_fits_file из utils, передавая путь к логу и директории поиска FITS
         # Ищем FITS файл в TMP_DIR и PROCESSED_FITS_DIR (на всякий случай)
-        fits_filename, base_filename = utils.choose_fits_file(str(path.PROCESSING_LOG_FILE), [str(path.TMP_DIR), str(path.PROCESSED_FITS_DIR)])
+        fits_filename, base_filename = ut.choose_fits_file(str(path.PROCESSING_LOG_FILE), [str(path.TMP_DIR), str(path.PROCESSED_FITS_DIR)])
         fits_file_path = Path(fits_filename) # Преобразуем результат в Path объект
     except (FileNotFoundError, ValueError, IOError) as e:
         print(f"Error when choosing a FITS file: {e}")
@@ -151,7 +151,7 @@ def main():
 
     try:
         # Используем локальную load_data, которая читает в QTable
-        data_table = utils.load_sextractor_genfromtxt(fn)
+        data_table = ut.load_sextractor_genfromtxt(fn)
         X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX, TH, FLAG, FLUX = data_table
         data_table = QTable({
             'X': X, 'Y': Y, 'ERRX': ERRX, 'ERRY': ERRY,
@@ -164,7 +164,7 @@ def main():
         logging.error(f"Error when downloading data from a catalog file: {e}")
         sys.exit(1) # Критическая ошибка, не можем продолжить без данных
 
-    processed_table = utils.preprocess_data(data_table, x_min=100, x_max=3100, y_min=50, y_max=2105)
+    processed_table = ut.preprocess_data(data_table, x_min=100, x_max=3100, y_min=50, y_max=2105)
 
     X = processed_table['X']
     Y = processed_table['Y']
@@ -180,15 +180,15 @@ def main():
     FLAG = processed_table['FLAG']
     FLUX = processed_table['FLUX']
 
-    ELONG = utils.compute_elongation(A, B)
+    ELONG = ut.compute_elongation(A, B)
 
     likely_satelite = ab_ratio(ELONG, threshold=5)
 
-    erroreX, erroreY = utils.compute_errores(ERRX, ERRY)
+    erroreX, erroreY = ut.compute_errores(ERRX, ERRY)
 
     hight_flux = FLUX >= 1000
 
-    outlier_indices = utils.is_outlier(ELONG)
+    outlier_indices = ut.is_outlier(ELONG)
     satellites = np.zeros(len(ELONG), dtype=bool)
     satellites[outlier_indices] = True
 
@@ -215,7 +215,7 @@ def main():
         ra_deg = coord.ra.deg
         dec_deg = coord.dec.deg
 
-        ra_hms, dec_dms = utils.convert_deg_to_hmsdms(ra_deg, dec_deg)
+        ra_hms, dec_dms = ut.convert_deg_to_hmsdms(ra_deg, dec_deg)
         print(f"RA: {ra_hms}, DEC: {dec_dms}")
         coords_first.append((ra_hms, dec_dms))
 
@@ -249,7 +249,7 @@ def main():
         ra_deg = coord.ra.deg
         dec_deg = coord.dec.deg
 
-        ra_hms, dec_dms = utils.convert_deg_to_hmsdms(ra_deg, dec_deg)
+        ra_hms, dec_dms = ut.convert_deg_to_hmsdms(ra_deg, dec_deg)
         print(f"RA: {ra_hms}, DEC: {dec_dms}")
         coords_second.append((ra_hms, dec_dms))
 

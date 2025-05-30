@@ -23,7 +23,7 @@ from astropy.time import Time
 from datetime import timedelta
 import path
 from mpl_toolkits.mplot3d import Axes3D
-from src.utils import utils
+from main.src.utils import ut
 
 
 
@@ -55,12 +55,12 @@ def save_results(coords, fits_filename, base_filename, X, Y, ERRX, ERRY, A, B, X
                 sky_coords, X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX):
             ra_deg = coord.ra.deg
             dec_deg = coord.dec.deg
-            ra_hms, dec_dms = utils.convert_deg_to_hmsdms(ra_deg, dec_deg)
+            ra_hms, dec_dms = ut.convert_deg_to_hmsdms(ra_deg, dec_deg)
             f.write(f"{ra_hms} {dec_dms} {x} {y} {errx} {erry} {a} {b} {xmin} {ymin} {xmax} {ymax}\n")
 
 
 def star_observation(X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX, fits_filename, base_filename):
-    ELONG = utils.compute_elongation(A, B)
+    ELONG = ut.compute_elongation(A, B)
 
     # Фильтрация по ELONG > 2.2
     elong_mask = ELONG > 3.10
@@ -72,7 +72,7 @@ def star_observation(X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX, fits_filena
         print("No data passed the ELONG filter.")
         return
 
-    erroreX, erroreY = utils.compute_errores(ERRX, ERRY)
+    erroreX, erroreY = ut.compute_errores(ERRX, ERRY)
     print(f"Filtered X: {X_filtered}, Y: {Y_filtered}")
 
     with fits.open(fits_filename) as hdul:
@@ -88,7 +88,7 @@ def star_observation(X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX, fits_filena
     for coord in sky_coords:
         ra_deg = coord.ra.deg
         dec_deg = coord.dec.deg
-        ra_hms, dec_dms = utils.convert_deg_to_hmsdms(ra_deg, dec_deg)
+        ra_hms, dec_dms = ut.convert_deg_to_hmsdms(ra_deg, dec_deg)
         coords_filtered.append((ra_hms, dec_dms))
         print(f"RA: {ra_hms}, DEC: {dec_deg}")
 
@@ -111,7 +111,7 @@ def main():
     try:
         # Используем choose_fits_file из utils, передавая путь к логу и директории поиска FITS
         # Ищем FITS файл в TMP_DIR и PROCESSED_FITS_DIR (на всякий случай)
-        fits_filename, base_filename = utils.choose_fits_file(str(path.PROCESSING_LOG_FILE), [str(path.TMP_DIR), str(path.PROCESSED_FITS_DIR)])
+        fits_filename, base_filename = ut.choose_fits_file(str(path.PROCESSING_LOG_FILE), [str(path.TMP_DIR), str(path.PROCESSED_FITS_DIR)])
         fits_file_path = Path(fits_filename) # Преобразуем результат в Path объект
     except (FileNotFoundError, ValueError, IOError) as e:
         print(f"Error when choosing a FITS file: {e}")
@@ -126,7 +126,7 @@ def main():
 
     try:
         # Используем локальную load_data, которая читает в QTable
-        data_table = utils.load_sextractor_genfromtxt(fn)
+        data_table = ut.load_sextractor_genfromtxt(fn)
         X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX, TH, FLAG, FLUX = data_table
         data_table = QTable({
             'X': X, 'Y': Y, 'ERRX': ERRX, 'ERRY': ERRY,
@@ -139,7 +139,7 @@ def main():
         logging.error(f"Error when downloading data from a catalog file: {e}")
         sys.exit(1) # Критическая ошибка, не можем продолжить без данных
 
-    processed_table = utils.preprocess_data(data_table, x_min=100, x_max=3100, y_min=50, y_max=2105)
+    processed_table = ut.preprocess_data(data_table, x_min=100, x_max=3100, y_min=50, y_max=2105)
     # print(f"X: {X}, Y: {Y}, ERRX: {ERRX}, ERRY: {ERRY}, A: {A}, B: {B}, XMIN: {XMIN}, YMIN: {YMIN}, XMAX: {XMAX}, YMAX: {YMAX}, TH: {TH}, FLAG: {FLAG}, FLUX: {FLUX}")
     
     star_observation(X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX, fits_filename, base_filename)

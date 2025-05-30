@@ -34,8 +34,8 @@ Launch under the sheath Astroconda (there is a conflict in Numpy versions
 import numpy as np
 from os import system 
 from pathlib import Path 
-import path 
-from src.utils import utils
+import path
+from main.src.utils import ut
 
 # Пути берем из нашего модуля path
 # DIR = 'TMP/' # Удаляем жестко заданный путь
@@ -48,7 +48,7 @@ xy_fits_file = path.XY_FITS_FILE # Путь к временному FITS фай�
 # --- Загрузка данных ---
 # Используем универсальную функцию загрузки из utils.py
 try:
-    X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX, TH, FLAG, FLUX = utils.load_sextractor_genfromtxt(str(sextractor_results_file))
+    X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX, TH, FLAG, FLUX = ut.load_sextractor_genfromtxt(str(sextractor_results_file))
     # load_sextractor_genfromtxt возвращает распакованные массивы, как np.genfromtxt(..., unpack=True)
 except FileNotFoundError:
     print(f"Error: SExtractor results were not found on the way {sextractor_results_file}.")
