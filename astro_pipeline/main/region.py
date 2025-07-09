@@ -34,21 +34,20 @@ Launch under the sheath Astroconda (there is a conflict in Numpy versions
 import numpy as np
 from os import system 
 from pathlib import Path 
-import path
-from main.src.utils import ut
+from src.utils import path
+from src.utils import utils
 
-# Пути берем из нашего модуля path
-# DIR = 'TMP/' # Удаляем жестко заданный путь
-sextractor_results_file = path.SEX_CATALOG_FILE # Путь к исходному файлу результатов SExtractor
-region_output_file = path.REGION_FILE # Путь к выходному файлу региона DS9
-xy_txt_file = path.XY_TXT_FILE # Путь к временному текстовому файлу с XY
-xy_fits_file = path.XY_FITS_FILE # Путь к временному FITS файлу с XY
+
+sextractor_results_file = path.SEX_CATALOG_FILE
+region_output_file = path.REGION_FILE 
+xy_txt_file = path.XY_TXT_FILE 
+xy_fits_file = path.XY_FITS_FILE 
 
 
 # --- Загрузка данных ---
 # Используем универсальную функцию загрузки из utils.py
 try:
-    X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX, TH, FLAG, FLUX = ut.load_sextractor_genfromtxt(str(sextractor_results_file))
+    X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX, TH, FLAG, FLUX = utils.load_sextractor_genfromtxt(str(sextractor_results_file))
     # load_sextractor_genfromtxt возвращает распакованные массивы, как np.genfromtxt(..., unpack=True)
 except FileNotFoundError:
     print(f"Error: SExtractor results were not found on the way {sextractor_results_file}.")
@@ -114,7 +113,3 @@ except Exception as e:
     # Не вызываем exit(1) здесь, чтобы остальная часть конвейера могла попытаться работать,
     # но если XY.fits критически важен, возможно, стоит выйти.
     # monitor2.bash уже проверяет существование TMP/XY.fits после этого шага.
-
-# Часть с %% в оригинале, похоже, использовалась для интерактивного выполнения в среде типа Spyder.
-# Для обычного скрипта это не нужно, оставляем только основной код.
-# %%

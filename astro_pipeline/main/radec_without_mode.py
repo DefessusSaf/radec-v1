@@ -13,7 +13,7 @@ import glob
 import numpy as np
 import sys
 import logging
-import path
+from src.utils import path
 import astropy.units as u
 from pathlib import Path
 from astropy.io import fits

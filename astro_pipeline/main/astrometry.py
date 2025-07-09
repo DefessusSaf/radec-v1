@@ -9,7 +9,7 @@ import astropy.units as _u
 from astropy import coordinates
 import numpy as np
 from src.utils import TicToc # Предполагается, что этот модуль существует и доступен
-import path # Импортируем наш модуль path
+from src.utils import path
 import logging # Добавим логирование
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

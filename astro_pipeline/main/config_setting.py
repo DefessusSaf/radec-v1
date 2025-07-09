@@ -9,7 +9,7 @@ from astropy.io import fits
 import astropy.units as u
 import logging
 from pathlib import Path 
-import path 
+from src.utils import path
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

@@ -17,7 +17,7 @@ logging.info(f"ROOT_DIR installed: {ROOT_DIR}")
 
 # SCRIPTS_DIR: Директория со всеми основными Python-скриптами.
 # Согласно вашей структуре, скрипты находятся прямо в ROOT_DIR.
-SCRIPTS_DIR = Path(__file__).resolve().parent
+SCRIPTS_DIR = Path(__file__).resolve().parent.parent
 logging.info(f"SCRIPTS_DIR installed: {SCRIPTS_DIR}")
 
 
@@ -31,7 +31,7 @@ logging.info(f"INPUT_DIR / LOAD_FILE_DIR installed: {LOAD_FILE_DIR}")
 
 
 # MAIN_DIR: Директория 'main' на верхнем уровне
-MAIN_DIR = SCRIPTS_DIR
+MAIN_DIR = SCRIPTS_DIR.parent
 logging.info(f"MAIN_DIR installed: {MAIN_DIR}")
 
 

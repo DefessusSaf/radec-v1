@@ -1,0 +1,454 @@
+[apex]
+_version = 2024.1.0             # Version of Apex core configuration (do not change!)
+
+[apex.astrometry.nutation]
+nut_theory = SF2001             # [str] Nutation theory (IAU-1980 or Shirai & Fukushima 2001) (IAU1980, SF2001)
+
+[apex.astrometry.reduction.sip_model]
+auto_exclude_terms = 1          # [bool] Automatically exclude insignificant {A|B}_p_q terms
+order = 4                       # [int] Maximum {A|B}_p_q polynomial order (order >= 2)
+
+[apex.astrometry.reduction.solution]
+default_model = 8const          # [str] Default plate reduction model ID
+discard_saturated = 1           # [int] Discard objects with this number of saturated pixels (0 = disable) (discard_saturated >= 0)
+iterative = 0                   # [bool] Perform iterative reduction
+max_error = 1.0                 # [float] [px] Exclude stars with larger residuals (0 to disable) (max_error >= 0)
+model_order = 8const, 6const, 4const    # [str list] Preferred plate reduction models, by decreasing priority
+radius = 0.0                    # [float] [arcmin] Exclude stars outside the central distortion-free zone of this radius (0 to disable)
+weighted = 0                    # [bool] Perform weighted reduction
+
+[apex.astrometry.refraction]
+eff_wavelength = 0.55           # [float] [um] Default effective wavelength for refraction calculation (eff_wavelength > 0)
+humidity = 50.0                 # [float] [%] Default relative humidity for refraction calculation (0 <= humidity <= 100)
+pressure = 1013.25              # [float] [hPa] Default air pressure for refraction calculation (pressure > 0)
+temperature = 0.0               # [float] [degC] Default temperature for refraction calculation
+tlr = 0.0065                    # [float] [K/m] Tropospheric temperature lapse rate for refraction calculation (tlr > 0)
+
+[apex.calibration.background]
+default_estimator = clean       # [str] Default background estimation algorithm ID
+
+[apex.calibration.background.clean_estimator]
+gauss_sigma = 3.0               # [float] Gaussian post-smoothing amount (0 to disable) (gauss_sigma >= 0)
+kernel_factor = 4.0             # [float] Filter kernel size in units of seeing (kernel_factor > 0)
+margin = 1                      # [int] Do not use the specified number of marginal rows/columns (margin >= 0)
+percentile = 0.3                # [float] Filter percentile (0.5 = median) (0 <= percentile <= 1)
+
+[apex.calibration.background.median_estimators]
+edge_width = 8                  # [int] Width of image areas used to remove edge artifacts (edge_width >= 0)
+gauss_sigma = 16.0              # [float] Gaussian post-smoothing amount (0 to disable) (gauss_sigma >= 0)
+median_scale = 0.02             # [float] Background inhomogeneity scale for median filter, in units of image size (0 to disable) (0 <= median_scale <= 1)
+pass2_gauss_sigma = 5.0         # [float] Gaussian post-smoothing amount for pass 2 (0 to disable) (pass2_gauss_sigma >= 0)
+pass2_sigma_factor = 3.0        # [float] Sigma-clipping factor for pass 2 (pass2_sigma_factor > 0)
+shrink_factor = 8.0             # [float] Amount to shrink image before smoothing (shrink_factor >= 1)
+
+[apex.calibration.background.minmax_estimator]
+kernel_factor = 2.0             # [float] Minmax filter kernel size in units of seeing (kernel_factor > 0)
+
+[apex.calibration.background.morphology_estimators]
+kernel_factor = 8.0             # [float] Filter kernel size in units of seeing (kernel_factor > 0)
+
+[apex.calibration.background.poly_estimator]
+x_degree = 2                    # [int] Approximating polynomial degree in X (x_degree >= 0)
+y_degree = 2                    # [int] Approximating polynomial degree in Y (y_degree >= 0)
+
+[apex.calibration.cosmetic]
+avlen = 5                       # [int] Length of averaging area for elimination of bad columns and rows (avlen > 1)
+avmethod = average              # [str] Averaging method (average, median)
+avsize = 3                      # [int] Size of square averaging area for elimination of bad pixels (avsize > 1)
+bad_col_fraction = 0.5          # [float] Fraction of column occupied by bad pixels needed to consider the whole column as bad (0 <= bad_col_fraction <= 1)
+bad_cols = ,                    # [int list] List of X coordinates of bad columns
+bad_pixels = ,                  # [str list] List of X:Y coordinates of bad pixels
+bad_row_fraction = 0.5          # [float] Fraction of row occupied by bad pixels needed to consider the whole row as bad (0 <= bad_row_fraction <= 1)
+bad_rows = ,                    # [int list] List of Y coordinates of bad rows
+sigma_factor = 10.0             # [float] Sigma-clipping factor used in iterative identification of deviating pixels (sigma_factor > 0)
+
+[apex.calibration.cosmic_rays]
+cleantype = meanmask            # [str] Clean algorithm to use (median, medmask, meanmask, idw)
+cr_reject_level = 4.0           # [float] Cosmic ray rejection factor (cr_reject_level > 0)
+fsmode = median                 # [str] Method to build the fine structure image (median, convolve)
+niter = 4                       # [int] Number of iterations of L.A.Cosmic (niter >= 1)
+objlim = 5.0                    # [float] Minimum contrast between Laplacian image and fine structure image (objlim > 0)
+psfbeta = 4.765                 # [float] Beta parameter for Moffat kernel (psfbeta > 0)
+psffwhm = 2.5                   # [float] [pixels] FWHM of the generated PSF (psffwhm > 0)
+psfmodel = gauss                # [str] Model to use to generate the PSF kernel for fsmode == convolve (gauss, gaussx, gaussy, moffat)
+psfsize = 7                     # [int] [pixels] Size of the generated PSF kernel (odd) (psfsize > 0 and psfsize % 2)
+sepmed = 1                      # [bool] Use the separable median filter instead of the full one
+sigclip = 4.5                   # [float] Laplacian-to-noise limit (sigclip > 0)
+sigfrac = 0.3                   # [float] Fractional detection limit for neighboring pixels (sigfrac > 0)
+
+[apex.calibration.dark]
+detrend_drift_dark = 0          # [bool] Eliminate linear growth of drift scan dark current due to low CTE
+interp_exposure_degree = 1      # [int] Degree of fitting polynomial for interpolation by exposure duration (interp_exposure_degree > 0)
+interp_temperature_degree = 1   # [int] Degree of fitting polynomial for interpolation by CCD temperature (interp_temperature_degree > 0)
+leave_saturated_pixels = 1      # [bool] Leave saturated pixels intact during dark frame subtraction
+max_memory = 512.0              # [float] Maximum megabytes of RAM consumed by superdark computation (max_memory > 0)
+
+[apex.calibration.flat]
+clip_factor = 3.0               # [float] Sigma clipping factor for superflat computation (clip_factor > 0)
+leave_saturated_pixels = 1      # [bool] Leave saturated pixels intact during dark frame subtraction
+local_average_size = 3          # [int] Averaging area size for bad pixels in superflat (local_average_size >= 3)
+max_memory = 512.0              # [float] Maximum megabytes of RAM consumed by superflat computation (max_memory > 0)
+
+[apex.calibration.params]
+auto_offset = 1                 # [bool] Shift data to ensure minimum ADU = 0
+bias_level = 0                  # [int] [ADU] Mean CCD bias level
+clip_max = 65535                # [int] [ADU] Upper clipping boundary
+clip_min = 0                    # [int] [ADU] Lower clipping boundary
+default_seeing = 8.0            # [float] Default seeing estimate, arcsec (default_seeing > 0)
+offset = 0                      # [int] Constant offset to add after additive calibration operations
+sat_level = 65535               # [int] [ADU] CCD saturation level
+use_clip_max = 0                # [bool] Enable upper clipping boundary
+use_clip_min = 0                # [bool] Enable lower clipping boundary
+use_sat_level = 0               # [bool] Enable clipping of ADUs above the saturation level
+
+[apex.catalog]
+default_catalog = USNO-A2.0     # [str] Global default catalog ID for all queries
+ident_tol = 7.0                 # [float] [arcsec] Object position tolerance for identification (ident_tol > 0)
+
+[apex.catalog.apass_reader]
+allow_remote = 1                # [bool] Use Internet (VizieR) version when local catalog is not available
+cat_path = ~/.Apex/catalogs/APASS       # [str] Path to APASS catalog files in MPO format (APASS.DAT)
+priority = 15                   # [int] Catalog priority for photometric reduction
+
+[apex.catalog.epos_reader]
+base_priority = 10.0            # [float] Priority of the 1st EPOS catalog
+catalog_mapping = {3: "Comet"}  # [str] Catalog number-to-type mapping
+epos_path = ""                  # [str] Path to the EPOS installation
+mag_limit = 0.0                 # [float] Upper magnitude limit for area queries (0 to disable)
+
+[apex.catalog.gaia_reader]
+astrometric_priority = 18       # [int] Catalog priority for astrometric reduction
+full_rec = 0                    # [bool] Return extended fields for each star (can slow down queries for rich fields)
+ident_priority = -8             # [int] Catalog priority for object identification
+photometric_priority = -8       # [int] Catalog priority for photometric reduction
+
+[apex.catalog.hip_reader]
+allow_remote = 1                # [bool] Use Internet (VizieR) version when local catalog is not available
+astrometric_priority = 15       # [int] Priority of HIPPARCOS for astrometric reduction
+cat_path = ~/.Apex/catalogs/HIPPARCOS   # [str] Path to HIPPARCOS catalog file (hip_main.dat)
+full_rec = 0                    # [bool] Return extended fields for each star (can slow down queries for rich fields)
+ident_priority = 12             # [int] Priority of HIPPARCOS for object identification
+photometric_priority = 5        # [int] Priority of HIPPARCOS for photometric reduction
+
+[apex.catalog.ison_reader]
+cat_path = ./                   # [str] Path to catalog files
+dynamic_update = 1              # [bool] Track changes to catalog disk files while Apex is running
+priority = 15                   # [int] Priority of the catalog for object identification
+
+[apex.catalog.landolt_reader]
+ident_priority = -1             # [int] Priority of Landolt stars for object post-identification
+photometric_priority = -1       # [int] Priority of Landolt stars for differential photometry
+
+[apex.catalog.text_reader]
+catalogs = ,                    # [str list] List of user catalog IDs
+
+[apex.catalog.tle_reader]
+dynamic_update = 1              # [bool] Track changes to catalog disk files while Apex is running
+priority = 16                   # [int] Priority of TLE data for object identification
+stdmag = 2.0                    # [float] Standard magnitude at 1000km range and 90deg phase angle
+tle_path = ./                   # [str] Path to TLE files
+
+[apex.catalog.twomass_reader]
+astrometric_priority = -7       # [int] Catalog priority for astrometric reduction
+full_rec = 0                    # [bool] Return extended fields for each star (can slow down queries for rich fields)
+ident_priority = -7             # [int] Catalog priority for object identification
+photometric_priority = -7       # [int] Catalog priority for photometric reduction
+
+[apex.catalog.tyc2_reader]
+allow_remote = 1                # [bool] Use Internet (VizieR) version when local catalog is not available
+astrometric_priority = -10      # [int] Priority of Tycho-2 for astrometric reduction
+cat_path = ~/.Apex/catalogs/Tycho2/     # [str] Path to Tycho-2 catalog files (tyc2.dat[.00-19] and index.dat)
+disable_suppl1 = 0              # [bool] Ignore the 1st Tycho-2 supplement
+full_rec = 0                    # [bool] Return extended fields for each star (can slow down queries for rich fields)
+ident_priority = -12            # [int] Priority of Tycho-2 for object identification
+photometric_priority = -5       # [int] Priority of Tycho-2 for photometric reduction
+
+[apex.catalog.ucac_reader]
+allow_remote = 0                # [bool] Use Internet (VizieR) version when local catalog is not available
+astrometric_priority = 15       # [int] Catalog priority for astrometric reduction
+cat_path = /home/hellnim/work/Catalogs/UCAC5/   # [str] Path to UCAC catalog files (z???)
+full_rec = 0                    # [bool] Return extended fields for each star (can slow down queries for rich fields)
+ident_priority = 8              # [int] Catalog priority for object identification
+mag_type = psf                  # [str] Type of magnitude used for UCAC3/4 (psf, aper)
+min_images = 3                  # [int] Minimum number of images used for a UCAC3/4/5 star (min_images >= 0)
+photometric_priority = 15       # [int] Catalog priority for photometric reduction
+use_gaia_pos = 0                # [bool] Use UCAC5 GAIA positions instead of UCAC positions
+
+[apex.catalog.usno_reader]
+mag_limit = 0.0                 # [float] Upper magnitude limit for area queries (0 to disable)
+usnoa_allow_remote = 1          # [bool] Use Internet (VizieR) version when local catalog is not available
+usnoa_astrometric_priority = 3  # [int] Priority of USNO-A for astrometric reduction
+usnoa_cat_path = ~/.Apex/catalogs/USNO-A2.0     # [str] Path to USNO-A catalog files (.cat and .acc)
+usnoa_ident_priority = 3        # [int] Priority of USNO-A for object identification
+usnoa_photometric_priority = 3  # [int] Priority of USNO-A for photometric reduction
+usnob_allow_remote = 1          # [bool] Use Internet (VizieR) version when local catalog is not available
+usnob_astrometric_priority = 4  # [int] Priority of USNO-B for astrometric reduction
+usnob_cat_path = ~/.Apex/catalogs/USNO-B1.0     # [str] USNO-B catalog directory (that containing 000 etc. subdirectories)
+usnob_full_rec = 0              # [bool] Return extended fields for each star (can slow down queries for rich fields)
+usnob_ident_priority = 4        # [int] Priority of USNO-B for object identification
+usnob_photometric_priority = 4  # [int] Priority of USNO-B for photometric reduction
+usnob_ppmxl_corr = 1            # [bool] Apply PPMXL correction to USNO-B1.0 coordinates and proper motions
+
+[apex.extra.GEO]
+_version = 4.2.0                # GEO package configuration version (do not change!)
+
+[apex.extra.GEO.detection]
+diurnal_tol = 5.0               # [float] [arcsec/s] Tolerance on rejecting objects with HA velocity equal to diurnal (0 to disable) (diurnal_tol >= 0)
+fixed_object_tol = 30.0         # [float] [arcsec] Reject objects with constant RA/Dec position within this precision (0 = auto, <0 = disable)
+fixed_object_tol_factor = 10.0  # [float] Automatic fixed_object_tol = astrometric accuracy * fixed_object_tol_factor (fixed_object_tol_factor > 0)
+max_acc = 0.01                  # [float] [arcsec/s2] Maximum allowed object acceleration (0 -> constrain to linear paths) (max_acc >= 0)
+max_tracklets = 1000000         # [int] Maximum number of candidate tracklets (max_tracklets > 0)
+max_vel = 60.0                  # [float] [arcsec/s] Maximum allowed object velocity (max_vel > 0)
+min_tracklet_len = 5            # [int] Minimum allowed number of detections per tracklet (min_tracklet_len >= 0)
+min_vel = 0.0                   # [float] [arcsec/s] Minimum allowed object velocity (min_vel >= 0)
+search_factor = 50.0            # [float] Tracklet search radius, in units of tracklet_tol (search_factor > 0)
+tracklet_tol = 10.0             # [float] [arcsec] Maximum allowed deviation from tracklet (tracklet_tol > 0)
+validate_orbit = 1              # [bool] Enable initial satellite orbit validation
+
+[apex.extra.GEO.ephem]
+format = vt                     # [str] Output GEO ephemeris format
+
+[apex.extra.GEO.propagation]
+default_propagator = SGP4       # [str] ID of default satellite orbit propagator
+
+[apex.extra.GEO.report]
+format = telegram,              # [str list] GEO object measurement report format(s)
+override = 0                    # [bool] Override existing measurements
+station = 10121                 # [str] Station code
+
+[apex.extra.GEO.report.ison_report]
+template = {year:04d}{month:02d}{day:02d}_{sensor}.xml  # [str] Measurement file name template
+
+[apex.extra.GEO.report.telegram_report]
+output_encoding = cp1251        # [str] Cyrillic character encoding in telegram (, cp855, cp866, cp1251, iso8859_5, koi8_r, koi8_u, mac_cyrillic, utf_8)
+report_by_object = 0            # [bool] Generate a separate report file for each target object
+
+[apex.extra.MP]
+_version = 2.1.4                # MP package configuration version (do not change!)
+
+[apex.extra.MP.mpc_report]
+contact = ""                    # [str] Batch header: contact details (triple quotes for multi-line)
+disable_photometry = 0          # [bool] Do not include the magnitude column into MPC line
+filter = ""                     # [str] Default optical band name (, B, V, R, I, J, W, U, g, r, i, w, y, z)
+hiprec = 0                      # [bool] Use maximum available decimal places
+mask = (object)/(refcat)((observer)).mpc        # [str] Batch file name pattern
+measurers = ""                  # [str] Batch header: list of measurers (triple quotes for multi-line)
+path = ""                       # [str] Location of MPC observation batches
+stats_mask = (object)/stats     # [str] Stats file name pattern
+telescope = ""                  # [str] Batch header: telescope details
+
+[apex.extraction]
+auto_threshold = 1              # [bool] Automatically compute detection threshold based on object_area
+back_level = mean               # [str] Background level estimation method (back_level in ("mean", "mode"))
+deblend = 1                     # [bool] Enable deblending
+deblender = mt_conn             # [str] Deblending algorithm ID
+empty_frame_threshold = 2.5     # [float] Detection threshold of frame with no objects if auto_threshold = 1, in units of noise RMS
+exclude = ""                    # [str] Exclude objects based on custom conditions
+extractor = conn                # [str] Object extraction algorithm ID
+fit_noise = 1                   # [bool] Refine detection threshold by fitting noise model
+max_star_area = 0.1             # [float] Maximum allowed fraction of the total image area occupied by a star (max_star_area >= 0)
+min_pixels_per_star = 5         # [int] Minimum allowed number of connected pixels which triggers detection (min_pixels_per_star >= 0)
+object_area = 0.8               # [float] Desired image area percent covered by objects for auto-thresholding (0 - use Otsu's thresholding) (0 <= object_area <= 100)
+postfilter_chain = trail_cluster,       # [str list] Comma-separated list of filters applied before segmentation
+prefilter_chain = ,             # [str list] Comma-separated list of filters applied before thresholding
+threshold = 3.0                 # [float] Detection threshold in units of noise RMS
+
+[apex.extraction.conn_deblender]
+connectivity = 1.0              # [float] Connectivity index (connectivity > 0)
+min_pixels = 5                  # [int] Minimum allowed number of connected pixels for a component (min_pixels >= 0)
+threshold_levels = 32           # [int] Number of levels for multithresholding (threshold_levels > 0)
+
+[apex.extraction.conn_extractor]
+connectivity = 1.0              # [float] Connectivity index (connectivity > 0)
+
+[apex.extraction.filtering.cleaning_prefilters]
+bad_col_median_width = 10       # [int] Median filter width for bad column eliminator (bad_col_median_width > 0)
+bad_col_sigma_factor = 2.5      # [float] Sigma factor for bad column detection (bad_col_sigma_factor > 0)
+spike_filter_level = 5.0        # [float] Spike elimination filter clipping level, in RMS units (spike_filter_level > 0)
+spike_filter_size = 3           # [int] Averaging square edge length for spike elimination filter (spike_filter_size >= 3)
+zero_filter_size = 3            # [int] Averaging square edge length for zero pixel elimination filter (zero_filter_size >= 3)
+
+[apex.extraction.filtering.denoising_prefilters]
+tv_iter = 10                    # [int] Number of filtering iterations (tv_iter >= 1)
+tv_weight = 50.0                # [float] Denoising weight (balance of denoising vs fidelity to input (tv_weight > 0)
+upenv_iter = 1                  # [int] Number of filtering iterations (upenv_iter >= 1)
+upenv_kind = mean               # [str] Condition for replacing the pixel by its local average (mean, min)
+
+[apex.extraction.filtering.general_prefilters]
+gauss_sigma = 0.0               # [float] Gaussian filter sigma (0 = auto) (gauss_sigma >= 0)
+median_kernel_size = 0          # [int] Median filter kernel size (0 = auto) (median_kernel_size >= 0)
+
+[apex.extraction.filtering.morphology_filters]
+density_threshold = 0.1         # [float] Clustering filter relative density threshold (0 <= density_threshold <= 1)
+kernel_size = 0                 # [int] Clustering post-filter kernel size (odd) (kernel_size == 0 or kernel_size > 0 and kernel_size % 2 == 1)
+le_annulus_factor = 3.0         # [float] Local extraction pre-filter annulus size factor (le_annulus_factor > 1)
+le_kernel_size = 0              # [int] Local extraction pre-filter kernel size (odd); 0 = auto (le_kernel_size == 0 or le_kernel_size > 0 and le_kernel_size % 2 == 1)
+
+[apex.extraction.filtering.trail_filters]
+density_threshold = 0.1         # [float] Trail-clustering filter relative density threshold (0 <= density_threshold <= 1)
+trail_cluster_length_factor = 0.5       # [float] Trail-clustering filter kernel length, in units of star trail length (trail_cluster_length_factor > 0)
+trail_elim_length_factor = 2.0  # [float] Trail eliminator filter kernel length, in units of star trail length (trail_elim_length_factor > 0)
+trail_elim_threshold = 0.8      # [float] Neighbor count threshold for star trail eliminator (0 <= trail_elim_threshold <= 1)
+
+[apex.extraction.rwave_deblender]
+min_pixels = 5                  # [int] Minimum allowed number of connected pixels for a component (min_pixels >= 0)
+threshold_levels = 32           # [int] Number of levels for multithresholding (threshold_levels > 0)
+
+[apex.identification]
+allow_flip = 1                  # [bool] Allow coordinate flip between image and catalog
+allow_pure_neighbor_match = 0   # [bool] Allow neighbor match with no objects identified by the matching core
+dec_tol = 60.0                  # [float] [arcmin] Boresight position tolerance in Dec (dec_tol >= 0)
+match_factor = 1.5              # [float] Factor for number of extra catalog stars (match_factor > 0)
+max_objects = 30                # [int] Maximum number of objects for direct match (max_objects >= 0)
+min_nnmatch_objects = 10        # [int] Minimum number of objects for nearest neighbor match (min_nnmatch_objects >= 0)
+min_objects = 4                 # [int] Minimum number of objects required for successful match (min_objects >= 0)
+name_match_mag_tol = 1.0        # [float] Magnitude tolerance for match by target name (0 to disable) (name_match_mag_tol >= 0)
+name_match_tol = 15.0           # [float] [arcsec] Position tolerance for match by target name (name_match_tol > 0)
+nnmatch_tol = 3.0               # [float] Position tolerance for nearest neighbor match, px (nnmatch_tol > 0)
+preferred_algorithms = dist-orient, triangle_fs, triangle_si    # [str list] List of matching algorithms to use, in order of preference
+ra_tol = 60.0                   # [float] [arcmin] Boresight position tolerance in RA (ra_tol >= 0)
+scale_tol = 0.1                 # [float] Relative image-catalog scale tolerance (0 to disable) (scale_tol >= 0)
+search_step = 0.75              # [float] FOV fraction to step by while searching field (>=1 - no overlapping) (search_step > 0)
+skew_tol = 0.5                  # [float] [deg] Relative image-catalog skewness angle tolerance (0 to disable) (skew_tol >= 0)
+sufficient_objects = 8          # [int] Number of matched objects to skip other algorithms (sufficient_objects >= 0)
+
+[apex.identification.dist_orient_identifier]
+confidence = 0.15               # [float] Vote confidence level (0 < confidence <= 1)
+dist_tol = 15.0                 # [float] Maximum allowed distance uncertainty, px (dist_tol > 0)
+rot_tol = 180.0                 # [float] Plate rotation tolerance, deg (rot_tol > 0)
+
+[apex.identification.triangle_identifier]
+confidence = 0.15               # [float] Vote confidence level (0 < confidence <= 1)
+match_tol = 0.001               # [float] Edge ratio tolerance (match_tol > 0)
+min_edge = 0.003                # [float] Minimum allowed dimensionless edge length (min_edge >= 0)
+ratio_limit = 10.0              # [float] Maximum allowed edge ratio (ratio_limit > 1)
+
+[apex.identification.world_view_identifier]
+confidence = 0.25               # [float] Match quality threshold (0 < confidence <= 1)
+max_rot = 15                    # [int] Maximum allowed rotation angle [deg]
+min_rot = -15                   # [int] Minimum allowed rotation angle [deg]
+profile_factor = 1.1            # [float] Proximity rescaling factor (1 + eps, where eps is small) (profile_factor > 1)
+profile_subdivs = 360           # [int] Number of subdivisions of [0,360) range (profile_subdivs > 0)
+
+[apex.io]
+default_format = ""             # [str] Default file format for writing images
+margin_bottom = 0               # [int] [px] Left margin (overscan)
+margin_left = 0                 # [int] [px] Left margin (overscan)
+margin_rigtt = 0                # [int] [px] Right margin (overscan)
+margin_top = 0                  # [int] [px] Top margin (overscan)
+
+[apex.io.apex_fmt]
+protocol = 1                    # [int] Storage protocol (see pickle module docs)
+
+[apex.io.fits_fmt]
+bitpix = LONG                   # [str] Image data type (SBYTE, BYTE, SHORT, USHORT, LONG, ULONG, LONGLONG, FLOAT, DOUBLE)
+compression = ""                # [str] Compression algorithm (, None, RICE, GZIP, PLIO, HCOMPRESS)
+field_mapping_in = ""           # [str] User mapping between FITS keywords and Apex internal image attributes
+field_mapping_out = ""          # [str] User mapping between Apex internal image attributes and FITS keywords
+field_mapping_wcs = ""          # [str] User mapping between FITS keywords and Apex internal image WCS attributes
+
+[apex.io.raster_fmt]
+channel = L                     # [str] Color channel to read (R, G, B, L)
+
+[apex.measurement.aperture]
+annulus_inner_factor = 1.5      # [float] Inner annulus diameter scaling factor, with respect to the aperture diameter (annulus_inner_factor > 0)
+annulus_inner_max = 0.0         # [float] [px] Maximum inner annulus diameter (annulus_inner_max >= 0)
+annulus_inner_min = 0.0         # [float] [px] Minimum inner annulus diameter (annulus_inner_min >= 0)
+annulus_outer_factor = 2.0      # [float] Outer annulus diameter scaling factor, with respect to the aperture diameter (annulus_outer_factor > 0)
+annulus_outer_max = 0.0         # [float] [px] Maximum outer annulus diameter (annulus_outer_max >= 0)
+annulus_outer_min = 0.0         # [float] [px] Minimum outer annulus diameter (annulus_outer_min >= 0)
+aperture_factor = 3.0           # [float] Aperture scaling factor, with respect to FWHM (aperture_factor > 0)
+aperture_max = 50.0             # [float] [px] Maximum aperture diameter (aperture_max >= 0)
+aperture_min = 3.0              # [float] [px] Minimum aperture diameter (aperture_min >= 0)
+default_aperture = elliptic     # [str] Global default aperture ID
+use_annulus = 0                 # [bool] Estimate background using annulus around the aperture
+
+[apex.measurement.psf.standard_baselines]
+user_baseline = a0 + a1*x + a2*y        # [str] User baseline expression (x and y - coordinates, a0 - background level, a1,... - other parameters)
+
+[apex.measurement.psf.standard_psfs]
+moffat_exponent = 4.0           # [float] Moffat profile exponent beta (1 - Lorentz, infinity - Gauss) (moffat_exponent > 1)
+
+[apex.measurement.psf_fitting]
+aperture_shape = elliptic       # [str] Aperture shape ID
+baseline = planar               # [str] PSF baseline ID
+fit_tol = 0.0001                # [float] Desired relative error of fit (fit_tol > 0)
+max_iter = 0                    # [int] Maximum number of fitting iterations (0 = auto) (max_iter >= 0)
+psf = gauss,                    # [str list] List of PSF shape IDs, in order of preference
+saturated_pixels = discard      # [str] What to do with saturated pixels (discard, fit, ignore)
+self_weighting = 0              # [bool] Perform self-weighting of data (may increase accuracy)
+trail_threshold = 2.0           # [float] Minimum FWHM ratio for trails (trail_threshold > 1)
+
+[apex.measurement.rejection]
+rejector_post_sequence = boundary, nopeak, fwhm, fwhm_tol, snr  # [str list] Sequence of rejection criteria applied after PSF fitting
+rejector_pre_sequence = fwhm,   # [str list] Sequence of rejection criteria applied before PSF fitting
+
+[apex.measurement.rejection.standard_rejectors]
+post>boundary_offset = 0.0      # [float] Offset from the exact image boundary for boundary rejector
+post>fwhm_tol_factor = 0.25     # [float] FWHM tolerance factor (fwhm_tol_factor > 0)
+post>max_fwhm = 50.0            # [float] Maximum allowed FWHM, px (0 to disable) (max_fwhm >= 0)
+post>min_fwhm = 0.9             # [float] Minimum allowed FWHM, px (0 to disable) (min_fwhm >= 0)
+post>min_snr = 1.5              # [float] Minimum allowed signal-to-noise ratio (min_snr >= 0)
+pre>boundary_offset = 0.0       # [float] Offset from the exact image boundary for boundary rejector
+pre>fwhm_tol_factor = 0.25      # [float] FWHM tolerance factor (fwhm_tol_factor > 0)
+pre>max_fwhm = 50.0             # [float] Maximum allowed FWHM, px (0 to disable) (max_fwhm >= 0)
+pre>min_fwhm = 0.9              # [float] Minimum allowed FWHM, px (0 to disable) (min_fwhm >= 0)
+pre>min_snr = 1.5               # [float] Minimum allowed signal-to-noise ratio (min_snr >= 0)
+
+[apex.net.settings]
+auto_proxy = 1                  # [bool] Use automatic proxy settings
+ftp_proxy = ""                  # [str] FTP proxy server (proto://domain.or.ip:port)
+http_proxy = ""                 # [str] HTTP proxy server (proto://domain.or.ip:port)
+timeout = 30.0                  # [float] [s] Network request timeout (timeout >= 0)
+
+[apex.net.vizier]
+base_url = http://vizier.u-strasbg.fr/viz-bin/VizieR-4  # [str] URL of VizieR service web interface or its mirror
+
+[apex.parallel]
+ncpus = 4                       # [int] Number of parallel processing units (0 - auto) (ncpus >= 0)
+
+[apex.photometry]
+default_gain = 1.0              # [float] [e-/ADU] Default inverse gain if unspecified in the image header (default_gain > 0)
+default_readout_noise = 10.0    # [float] [e-] Default readout noise if unspecified in the image header (default_readout_noise > 0)
+flux_type = aper                # [str] Which flux is used for instrumental magnitude (psf, aper, full, pixel)
+
+[apex.photometry.differential]
+airmass_correction = 1          # [bool] Perform differential extinction (airmass) correction
+discard_saturated = 1           # [int] Discard refstars with this number of saturated pixels (0 = disable) (discard_saturated >= 0)
+error_method = fit              # [str] Differential photometry error estimation method (fit, rms)
+max_mag = 0.0                   # [float] Upper magnitude limit (0 to disable)
+max_snr = 800.0                 # [float] Maximum SNR for reference stars (0 to disable) (max_snr >= 0)
+min_mag = 0.0                   # [float] Lower magnitude limit (0 to disable)
+min_snr = 100.0                 # [float] Minimum SNR for reference stars (min_snr >= 0)
+model = 0                       # [int] Degree of the model polynomial (model >= 0)
+sigma_factor = 3.0              # [float] Sigma-clipping factor (sigma_factor > 0)
+weighted = 0                    # [bool] Perform weighted least-squares fit
+
+[apex.sitedef]
+altitude = 2750.0               # [float] [m] Observatory elevation above the reference spheroid (MSL)
+latitude = 43.225278            # [float] [deg] Observatory latitude (positive for North) (-90 <= latitude <= 90)
+longitude = 77.870555           # [float] [deg] Observatory longitude (positive for East) (-180 <= longitude <= 180)
+observatory_code = ""           # [str] IAU observatory code
+update_interval = 0             # [int] [day] MPC observatory code database update interval (0 to disable auto-update) (update_interval >= 0)
+
+[apex.test:test]
+bval = False
+fval = 0.20303628875934643
+ival = 828
+lval = 1, 2, 3
+sval = test0.2824225366826232
+
+[apex.util.automation.calibration]
+calib_dir = ""                  # [str] Path to darks/flats (empty = current dir)
+cosmetics_last = 0              # [bool] Correct cosmetics before vs after darks/flats during standard calibration
+dark_exposure_tol = 0.1         # [float] [s] Exposure duration tolerance for automatic dark frame search (dark_exposure_tol >= 0)
+dark_temperature_tol = 0.5      # [float] [K] CCD temperature tolerance for automatic dark frame search (dark_temperature_tol >= 0)
+max_flat_adu = 50000.0          # [float] Maximum allowed median ADU for auto-selection of flats
+min_flat_adu = 10000.0          # [float] Minimum allowed median ADU for auto-selection of flats
+remove_cosmics = 0              # [bool] Eliminate cosmic ray hits during standard calibration
+require_dark = 0                # [bool] Terminate processing if no appropriate dark frame found
+require_flat = 0                # [bool] Terminate processing if no appropriate flatfield frame found
+synthetic_flat = 0              # [bool] Use synthetic flatfield if no appropriate flatfield frame found and require_flat = 0
+
+[apex.util.report.table]
+default_format = "#", radec, diff_radec, xy, diff_xy, obs, match, phot_match, diff_phot, psf_phot, aper_phot, opt_phot, profile, roi    # [str list] Default table format (#, radec, xy, diff_radec, diff_xy, obs, roi, profile, match, phot_match, psf_phot, aper_phot, opt_phot, diff_phot)
