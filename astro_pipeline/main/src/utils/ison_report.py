@@ -1,7 +1,6 @@
+# ison_report.py
 import xml.etree.ElementTree as ET
-import os
 from pathlib import Path
-from datetime import datetime
 from filelock import FileLock, Timeout
 from src.utils import path
 
@@ -13,7 +12,7 @@ def ra_to_dec(ra: str) -> float:
     """
     Convert RA in H:M:S format to decimal degrees.
     """
-    h, m, s = map(float, ra.split(":"))
+    h, m, s = map(float, ra.split(':'))
     return h + m / 60 + s / 3600
 
 
@@ -21,8 +20,8 @@ def dec_to_dec(dec: str) -> float:
     """
     Convert Dec in ±D:M:S format to decimal degrees.
     """
-    sign = -1 if dec.startswith("-") else 1
-    d, m, s = map(float, dec.lstrip("+-").split(":"))
+    sign = -1 if dec.startswith('-') else 1
+    d, m, s = map(float, dec.lstrip('+-').split(':'))
     return sign * (d + m / 60 + s / 3600)
 
 
@@ -61,31 +60,6 @@ def parse_data_with_filename(raw_data: list[str], sensor_id: int = 10121) -> lis
     return parsed
 
 
-def process_results_dir(dir_path: Path) -> list[dict]:
-    """
-    Process all result files in directory and return list of entries.
-    """
-    all_entries = []
-    for file in dir_path.iterdir():
-        if file.is_file():
-            with open(file, 'r') as f:
-                lines = [l.strip() for l in f if l.strip() and not l.startswith('#')]
-            all_entries.extend(parse_data_with_filename(lines))
-    return all_entries
-
-
-def group_files_by_prefix(dir_path: Path) -> dict[str, list[Path]]:
-    """
-    Group files in directory by prefix before first underscore.
-    """
-    groups: dict[str, list[Path]] = {}
-    for file in dir_path.iterdir():
-        if file.is_file():
-            prefix = file.stem.split('_')[0]
-            groups.setdefault(prefix, []).append(file)
-    return groups
-
-
 def create_ison_report(data: list[dict], output_file: Path) -> None:
     """
     Create XML report from data list and save to output_file.
@@ -116,45 +90,40 @@ def create_ison_report(data: list[dict], output_file: Path) -> None:
     tree.write(output_file, encoding='utf-8', xml_declaration=True)
 
 
-def generate_reports(mode: str = 'date') -> None:
+def generate_report_for_file(result_file: Path, sensor_id: int = 10121) -> None:
     """
-    Generate ISON reports in the specified mode: 'date' or 'prefix'.
-    Reports are saved in path.ISON directory.
+    Generate an ISON report for a single result file in streaming mode.
+    The report filename is based on the UTC timestamp from the file's data.
     """
+    # Read raw data
+    with open(result_file, 'r', encoding='utf-8') as f:
+        raw_lines = [l.strip() for l in f if l.strip() and not l.startswith('#')]
+
+    # Parse data: yields list with each object entry
+    entries = parse_data_with_filename(raw_lines, sensor_id=sensor_id)
+    if not entries:
+        return
+
+    # Determine report name from UTC, sanitize for filename
+    utc_str = entries[0]['utc']
+    safe_utc = utc_str.replace(':', '').replace(' ', '_')
+    out_file = path.ISON / f'ison_report_{safe_utc}.xml'
+
+    # Ensure directory and lock
     path.ISON.mkdir(parents=True, exist_ok=True)
     lock = FileLock(str(LOCK_FILE), timeout=LOCK_TIMEOUT)
     try:
         with lock:
-            if mode == 'date':
-                date_str = datetime.utcnow().strftime('%Y%m%d')
-                out_file = path.ISON / f'ison_report_{date_str}.xml'
-                data = process_results_dir(path.PROCESSED_RESULTS_DIR)
-                create_ison_report(data, out_file)
-                print(f'Ison report created: {out_file}')
-
-            # in developing 
-            elif mode == 'prefix':
-                groups = group_files_by_prefix(path.PROCESSED_RESULTS_DIR)
-                for prefix, files in groups.items():
-                    # Temporarily change processing_dir
-                    temp_dir = Path(path.TMP_DIR) / f'tmp_{prefix}'
-                    temp_dir.mkdir(parents=True, exist_ok=True)
-                    for f in files:
-                        (temp_dir / f.name).write_bytes(f.read_bytes())
-                    data = process_results_dir(temp_dir)
-                    out_file = path.ISON / f'ison_report_{prefix}.xml'
-                    create_ison_report(data, out_file)
-                    print(f'Ison report created: {out_file}')
-                    # cleanup temp_dir
-                    for f in temp_dir.iterdir():
-                        f.unlink()
-                    temp_dir.rmdir()
-            else:
-                raise ValueError("Unknown mode, use 'date' or 'prefix'.")
+            create_ison_report(entries, out_file)
     except Timeout:
-        print('Could not acquire lock for report generation.')
+        # lock acquisition failed — skip or log
+        pass
 
 
 if __name__ == '__main__':
-    # By default generate daily report
-    generate_reports(mode=os.environ.get('ISON_REPORT_MODE', 'date'))
+    import sys
+    if len(sys.argv) < 2:
+        print('Usage: python ison_report.py <result_file> [sensor_id]')
+        sys.exit(1)
+    sensor = int(sys.argv[2]) if len(sys.argv) > 2 else 10121
+    generate_report_for_file(Path(sys.argv[1]), sensor)

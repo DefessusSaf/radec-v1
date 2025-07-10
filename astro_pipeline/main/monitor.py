@@ -1,193 +1,169 @@
-# monitor.py
-
 import sys
 import time
 import subprocess
 import logging
-import shutil 
 from pathlib import Path
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-from filelock import FileLock, Timeout 
+from filelock import FileLock, Timeout
 from src.utils import path
-from src.utils.ison_report import generate_reports
+from src.utils.ison_report import generate_report_for_file
 
-def process_file(file_path: Path):
+# Directories and paths
+SCRIPTS_DIR = Path(__file__).resolve().parent
+LOAD_DIR = path.LOAD_FILE_DIR
+TMP_DIR = path.TMP_DIR
+PROCESSED_FITS_DIR = path.PROCESSED_FITS_DIR
+RESULTS_DIR = path.PROCESSED_RESULTS_DIR
+LOCK_FILE = path.LOCK_FILE
+LOG_DIR = path.MAIN_DIR / "log"
+LOG_FILE = LOG_DIR / "monitor.log"
+PROCESSING_LOG = path.PROCESSING_LOG_FILE
 
+
+def run_and_log(command: list, description: str):
     """
-    It processes one fits file, letting it through the entire conveyor of the Python scripts
-    And external utilities.The entire conclusion of the offenses is logged in.
+    Run a subprocess command and log its output.
 
     Args:
-        file_path (Path): The full path to the file that you need to process (object is Path).
+        command (list): Command and arguments to run.
+        description (str): Short description for logging.
     """
-    logging.info(f"\n--- We start processing the file: {file_path.name} ---")
+    logging.info(f"=== Running {description} ===")
+    logging.info(f"Command: {' '.join(map(str, command))}")
+    result = subprocess.run(command, capture_output=True, text=True, check=True)
+    if result.stdout:
+        logging.info(f"{description} stdout:\n{result.stdout.strip()}")
+    if result.stderr:
+        logging.warning(f"{description} stderr:\n{result.stderr.strip()}")
 
+
+def process_file(file_path: Path):
+    """
+    Process a single FITS file through the pipeline and generate an ISON report.
+
+    Steps:
+    1. Record file path in processing log
+    2. Run config_setting, region, astrometry, and radec scripts
+    3. Validate XY file
+    4. Locate output result files in RESULTS_DIR
+    5. Generate ISON report for each valid result
+    6. Clean up: remove original FITS and clear log
+    """
+    logging.info(f"Start processing: {file_path.name}")
     try:
-        logging.info(f"Record the name of the file in {path.PROCESSING_LOG_FILE}")
-        path.PROCESSING_LOG_FILE.write_text(str(file_path))
+        # Mark file as processing
+        PROCESSING_LOG.write_text(str(file_path))
 
+        # Run external processing scripts
+        run_and_log([sys.executable, SCRIPTS_DIR / "config_setting.py", str(file_path)], "config_setting.py")
+        run_and_log([sys.executable, SCRIPTS_DIR / "region.py", str(file_path)], "region.py")
+        run_and_log([sys.executable, SCRIPTS_DIR / "astrometry.py", str(file_path)], "astrometry.py")
+        run_and_log([sys.executable, SCRIPTS_DIR / "radec_without_mode.py", str(file_path)], "radec_without_mode.py")
 
-        # The function for launching the offense and logging in its withdrawal
-        def run_and_log_subprocess(command_list, description):
-            logging.info(f'===========  Launch {description} ===========')
-            logging.info(f"Command: {' '.join(map(str, command_list))}")
-            result = subprocess.run(command_list, capture_output=True, text=True, check=True, encoding='utf-8')
-            if result.stdout:
-                logging.info(f"STDOUT {description}:\n{result.stdout.strip()}")
-            if result.stderr:
-                logging.warning(f"STDERR {description}:\n{result.stderr.strip()}")
-            logging.info(f'{description} Completed.')
-
-        run_and_log_subprocess([sys.executable, str(SCRIPTS_DIR / "config_setting.py"), str(file_path)], "config_setting.py")
-
-        run_and_log_subprocess([sys.executable, str(SCRIPTS_DIR / "region.py")], "region.py")
-
-        run_and_log_subprocess([sys.executable, str(SCRIPTS_DIR / "astrometry.py"), str(file_path)], "astrometry.py")
-
-        run_and_log_subprocess([sys.executable, str(SCRIPTS_DIR / "radec_StarObservation.py")], "radec_StarObservation.py")
-
+        # Verify XY FITS
         if not path.XY_FITS_FILE.exists() or path.XY_FITS_FILE.stat().st_size == 0:
-            logging.error(f"Error: File {path.XY_FITS_FILE} was not created or empty after processing.")
-            raise RuntimeError(f"Absent or empty file {path.XY_FITS_FILE}")
+            raise RuntimeError(f"Missing or empty XY FITS: {path.XY_FITS_FILE}")
 
-        logging.info(f"Removing the processed file: {file_path.name}")
+        # Find result files matching the processed stem
+        stem = file_path.stem
+        matches = list(RESULTS_DIR.glob(f"{stem}*"))
+        if not matches:
+            logging.error(f"No result files for '{stem}' in {RESULTS_DIR}")
+        for result_file in matches:
+            if result_file.exists() and result_file.stat().st_size > 0:
+                try:
+                    generate_report_for_file(result_file)
+                    logging.info(f"ISON report generated for {result_file.name}")
+                except Exception:
+                    logging.exception(f"Failed ISON report for {result_file.name}")
+            else:
+                logging.error(f"Invalid result file: {result_file}")
+
+        # Remove original FITS
         file_path.unlink()
-
-        logging.info(f"File cleaning {path.PROCESSING_LOG_FILE}")
-        path.PROCESSING_LOG_FILE.write_text("")
-
-        logging.info(f"--- File processing {file_path.name} completed successfully ---\n")
-
-        try:
-            generate_reports(mode='prefix')        # or mode='prefix'
-            logging.info("ISON report updated.")
-        except Exception as e:
-            logging.error(f"Failed to update ISON report: {e}")
+        logging.info(f"Removed processed file: {file_path.name}")
 
     except subprocess.CalledProcessError as e:
-        logging.error(f"An error of the script/team: {e.cmd}")
-        logging.error(f"Return code: {e.returncode}")
+        logging.error(f"Subprocess error in {e.cmd}: return code {e.returncode}")
         if e.stdout:
-            logging.error(f"STDOUT (error):\n{e.stdout.strip()}")
+            logging.error(f"stdout: {e.stdout.strip()}")
         if e.stderr:
-            logging.error(f"STDERR (error):\n{e.stderr.strip()}")
-        logging.error(f"File processing {file_path.name} It ended with an error.We miss.\n")
-    except FileNotFoundError as e:
-        logging.error(f"Error: NOT File: {e}")
-        logging.error(f"File processing {file_path.name} It ended with an error.We miss.\n")
-    except RuntimeError as e:
-        logging.error(f"Processing error: {e}")
-        logging.error(f"File processing {file_path.name} It ended with an error.We miss.\n")
+            logging.error(f"stderr: {e.stderr.strip()}")
     except Exception as e:
-        logging.exception(f"Unexpected error when processing a file {file_path.name}:")
-        logging.error(f"File processing {file_path.name} It ended with an error.We miss.\n")
+        logging.exception(f"Error processing {file_path.name}: {e}")
     finally:
-        if path.PROCESSING_LOG_FILE.exists() and path.PROCESSING_LOG_FILE.read_text() == str(file_path):
-             logging.warning(f"Log File {path.PROCESSING_LOG_FILE} I was not cleared after the error, I clean.")
-             path.PROCESSING_LOG_FILE.write_text("")
-
-    
-
+        # Clear processing log if it still points to this file
+        if PROCESSING_LOG.exists():
+            PROCESSING_LOG.write_text("")
+        logging.info(f"Processing log cleared.")
 
 
 class NewFileHandler(FileSystemEventHandler):
-
     """
-    File system events responding to creating new files.
+    Watchdog event handler that processes newly created files.
     """
-
-    def __init__(self, processing_function, lock_file_path):
+    def __init__(self, processing_fn, lock_path: Path):
         super().__init__()
-        self.processing_function = processing_function
-        self.lock_file_path = lock_file_path
-        self.lock = FileLock(str(lock_file_path), timeout=1) # Таймаут для лок-файла
-
+        self.processing_fn = processing_fn
+        self.lock = FileLock(str(lock_path), timeout=1)
 
     def on_created(self, event):
-        """
-        It is called when the file or directory is created.
-        Processes only files, ignoring the directory.
-        """
         if event.is_directory:
             return
-
         file_path = Path(event.src_path)
-        logging.info(f"A new file has been discovered: {file_path.name}")
-
+        logging.info(f"Detected new file: {file_path.name}")
         try:
             with self.lock:
-                logging.info(f"Blocking is obtained for {file_path.name}")
-                self.processing_function(file_path)
-                logging.info(f"The lock is removed for {file_path.name}")
+                logging.info(f"Acquired lock for {file_path.name}")
+                self.processing_fn(file_path)
+                logging.info(f"Released lock for {file_path.name}")
         except Timeout:
-            logging.warning(f"Failed to get a lock for {file_path.name}. The processing process has already been launched. We miss.")
+            logging.warning(f"Lock timeout for {file_path.name}, skipping.")
         except Exception as e:
-            logging.error(f"Error when working with blocking for {file_path.name}: {e}")
-
-
-SCRIPTS_DIR = Path(__file__).resolve().parent
+            logging.error(f"Error handling file {file_path.name}: {e}")
 
 
 def main():
-    LOG_DIR = path.MAIN_DIR / "log"
-    LOG_FILE_PATH = LOG_DIR / "monitor.log"
-
+    # Prepare logging
     LOG_DIR.mkdir(parents=True, exist_ok=True)
+    if LOG_FILE.exists():
+        LOG_FILE.unlink()
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler(LOG_FILE, mode='a'),
+            logging.StreamHandler(sys.stdout)
+        ]
+    )
+    logging.info("Monitor started.")
 
-    if LOG_FILE_PATH.exists():
-        try:
-            LOG_FILE_PATH.unlink()
-        except Exception as e:
-            print(f"Error: failed to clean the old log-file {LOG_FILE_PATH}: {e}", file=sys.stderr)
+    # Ensure directories exist
+    for d in [LOAD_DIR, TMP_DIR, PROCESSED_FITS_DIR, RESULTS_DIR, path.CONFIGS_DIR]:
+        d.mkdir(parents=True, exist_ok=True)
+    logging.info("All required directories are ready.")
 
-    # Cleaning all previous logistics handlers
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
-
-    # We set up logistics:
-    logging.basicConfig(level=logging.INFO,
-                        format='%(asctime)s - %(levelname)s - %(message)s',
-                        handlers=[
-                            logging.FileHandler(LOG_FILE_PATH, mode='a'), 
-                            logging.StreamHandler(sys.stdout)
-                        ])
-
-    logging.info(f"Log File {LOG_FILE_PATH} Cleaned/created at launch.")
-
-    # --- The rest of the logic of the main function (creation of directory, tuning the observer, cycle) ---
-    path.LOAD_FILE_DIR.mkdir(parents=True, exist_ok=True)
-    path.TMP_DIR.mkdir(parents=True, exist_ok=True)
-    path.PROCESSED_FITS_DIR.mkdir(parents=True, exist_ok=True)
-    path.PROCESSED_RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    path.CONFIGS_DIR.mkdir(parents=True, exist_ok=True)
-
-    logging.info("All the necessary project directors have been tested/created.")
-
-    event_handler = NewFileHandler(process_file, path.LOCK_FILE)
+    # Set up file watcher
+    handler = NewFileHandler(process_file, LOCK_FILE)
     observer = Observer()
-    observer.schedule(event_handler, str(path.LOAD_FILE_DIR), recursive=False) 
-
-    logging.info(f"--- Directorate of monitoring of directory: {path.LOAD_FILE_DIR} ---")
-    logging.info(f"The temporary directory is used: {path.TMP_DIR}")
-    logging.info(f"Lock file is used: {path.LOCK_FILE}")
-
+    observer.schedule(handler, str(LOAD_DIR), recursive=False)
     observer.start()
+    logging.info(f"Watching directory: {LOAD_DIR}")
 
+    # Main loop
     try:
         while True:
-            time.sleep(1) #We are waiting for 1 second so as not to load CPU
+            time.sleep(1)
     except KeyboardInterrupt:
         observer.stop()
-        logging.info("Monitoring is stopped by the user.")
-    except Exception as e:
-        logging.exception("An unforeseen error of the main monitoring cycle occurred:")
+        logging.info("Monitor stopped by user.")
+    except Exception:
+        logging.exception("Unhandled exception in monitor loop.")
     finally:
         observer.join()
-        logging.info("The monitor completed the work.")
-
-    logging.info("test log file after start monitor.py")
+        logging.info("Monitor shutdown complete.")
 
 
 if __name__ == "__main__":
-    main() 
+    main()
