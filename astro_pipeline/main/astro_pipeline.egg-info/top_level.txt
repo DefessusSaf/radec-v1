@@ -1,0 +1,10 @@
+add
+astrometry
+conf
+config_setting
+log
+monitor
+radec_StarObservation
+radec_without_mode
+region
+src

@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: astro_pipeline
+Version: 0.1.0
+Summary: Пайплайн обработки FITS-изображений и формирования отчётов
+Author: Ваше Имя
+Author-email: you@example.com
+License: MIT
+Dynamic: author
+Dynamic: author-email
+Dynamic: license
+Dynamic: summary
