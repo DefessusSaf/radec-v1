@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='utf-8'?>
+<data><meas><sensor>10121</sensor><id>1</id><utc>2024-09-08T22:15:50.347</utc><file>99763_1_00006.fits</file><ra_j2000>2.926075</ra_j2000><dec_j2000>-30.139263888888888</dec_j2000><x>1522.4124</x><y>857.9022</y><x_error>0.047848806966177784</x_error><y_error>0.019572061456051452</y_error><a>7.26</a><b>2.257</b><x_min>1507.0</x_min><y_min>852.0</y_min><x_max>1536.0</x_max><y_max>865.0</y_max><suspicious>false</suspicious></meas></data>

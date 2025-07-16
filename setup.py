@@ -21,11 +21,9 @@ setup(
     include_package_data=True,
     install_requires=[
 
-        # ... другие внешние зависимости
     ],
     entry_points={
         "console_scripts": [
-            # если нужен CLI: astro-pipeline → ваша точка входа
             "astro=monitor:main",
         ],
     },

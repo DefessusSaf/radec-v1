@@ -6,6 +6,7 @@ astro_pipeline/main/monitor.py
 astro_pipeline/main/radec_StarObservation.py
 astro_pipeline/main/radec_without_mode.py
 astro_pipeline/main/region.py
+astro_pipeline/main/add/FDRanalyze.py
 astro_pipeline/main/add/GSS_Apex_TURBO.py
 astro_pipeline/main/add/RA_DEC_astropy.py
 astro_pipeline/main/add/WFT_copy19.py

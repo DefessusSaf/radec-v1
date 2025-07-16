@@ -136,11 +136,24 @@ def main():
     except (FileNotFoundError, IOError) as e:
         print(f"Error when downloading data from a catalog file: {e}")
         logging.error(f"Error when downloading data from a catalog file: {e}")
-        sys.exit(1) # Критическая ошибка, не можем продолжить без данных
-
-    processed_table = utils.preprocess_data(data_table, x_min=100, x_max=3100, y_min=50, y_max=2105)
+        sys.exit(1) 
+    processed_table = utils.preprocess_data(data_table, x_min=100, x_max=3150, y_min=50, y_max=3150)
     # print(f"X: {X}, Y: {Y}, ERRX: {ERRX}, ERRY: {ERRY}, A: {A}, B: {B}, XMIN: {XMIN}, YMIN: {YMIN}, XMAX: {XMAX}, YMAX: {YMAX}, TH: {TH}, FLAG: {FLAG}, FLUX: {FLUX}")
-    
+    X = processed_table['X']
+    Y = processed_table['Y']
+    ERRX = processed_table['ERRX']
+    ERRY = processed_table['ERRY']
+    A = processed_table['A']
+    B = processed_table['B']
+    XMIN = processed_table['XMIN']
+    YMIN = processed_table['YMIN']
+    XMAX = processed_table['XMAX']
+    YMAX = processed_table['YMAX']
+    TH = processed_table['TH']
+    FLAG = processed_table['FLAG']
+    FLUX = processed_table['FLUX']
+
+
     star_observation(X, Y, ERRX, ERRY, A, B, XMIN, YMIN, XMAX, YMAX, fits_filename, base_filename)
 
     

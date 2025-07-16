@@ -59,7 +59,9 @@ def process_file(file_path: Path):
         run_and_log([sys.executable, SCRIPTS_DIR / "config_setting.py", str(file_path)], "config_setting.py")
         run_and_log([sys.executable, SCRIPTS_DIR / "region.py", str(file_path)], "region.py")
         run_and_log([sys.executable, SCRIPTS_DIR / "astrometry.py", str(file_path)], "astrometry.py")
-        run_and_log([sys.executable, SCRIPTS_DIR / "radec_without_mode.py", str(file_path)], "radec_without_mode.py")
+        # run_and_log([sys.executable, SCRIPTS_DIR / "radec_without_mode.py", str(file_path)], "radec_without_mode.py")
+        run_and_log([sys.executable, SCRIPTS_DIR / "radec_StarObservation.py", str(file_path)], "radec_StarObservation.py")
+
 
         # Verify XY FITS
         if not path.XY_FITS_FILE.exists() or path.XY_FITS_FILE.stat().st_size == 0:
